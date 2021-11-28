@@ -4,12 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.2.RELEASE</version>
-    </parent>
-
     <groupId>com.example</groupId>
     <artifactId>spring-boot-demo</artifactId>
     <packaging>pom</packaging>
@@ -25,15 +19,6 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <spring-boot-version>2.3.2.RELEASE</spring-boot-version>
     </properties>
 
-    <dependencies>
-        <!-- lombok插件 -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-    </dependencies>
 </project>
