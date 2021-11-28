@@ -13,3 +13,21 @@
 
 
 
+## 项目结构
+
+```
+spring-boot-demo
+  ├── spring-boot-sharding-jdbc                    #常见问题，注意事项,参考资料
+  │   ├── spring-boot-sharding-jdbc-5.0.0
+  │   │   ├── sharding-jdbc-5.0.0-simple-db-table  #分库分表快速入门版
+  │   │   └── sharding-jdbc-5.0.0-db-table         #分库分表自定义分片规则，自定义自增主键生成器
+  │   ├── spring-boot-sharding-jdbc-4.1.1
+  │   ├── sharding-jdbc-4.1.1-simple-db-table      #分库分表快速入门版
+  │   └── sharding-jdbc-4.1.1-db-table             #分库分表自定义分片规则，自定义自增主键生成器
+  └── 其它  #正在补充中
+```
+
+**示例代码**
+
+- [spring-boot-sharding-jdbc示例](https://github.com/WENZIZZHENG/spring-boot-demo/tree/master/spring-boot-sharding-jdbc)
+
