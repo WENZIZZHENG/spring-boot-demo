@@ -10,7 +10,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sharding-jdbc-5.0.0</artifactId>
+    <artifactId>spring-boot-sharding-jdbc-5.0.0</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>sharding-jdbc-5.0.0-simple-db-table</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

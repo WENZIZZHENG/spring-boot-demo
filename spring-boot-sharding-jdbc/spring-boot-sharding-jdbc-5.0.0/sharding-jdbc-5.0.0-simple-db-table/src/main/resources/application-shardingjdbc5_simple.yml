@@ -1,0 +1,113 @@
+spring:
+  # 数据源配置
+  shardingsphere:
+    props:
+      # 这里的其它属性，参考： https://shardingsphere.apache.org/document/5.0.0/cn/user-manual/shardingsphere-jdbc/configuration/props/
+      # 打印 SQL
+      sql-show: true
+      # 在程序启动和更新时，是否检查重复表。
+      check-duplicate-table-enabled: true
+    # 数据源
+    datasource:
+      # 配置真实数据源
+      names: ds0,ds1
+      # 配置第 1 个数据源
+      ds0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/demo_ds_0?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: root
+      # 配置第 2 个数据源
+      ds1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/demo_ds_1?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: root
+    rules:
+      sharding:
+        # 绑定表规则列表,不配置也可以，若配置了，在tables下一定要配规则，否则直接启动报错
+        binding-tables: t_goods,t_user
+        # 分库默认分片策略(只对配置了分片规则的表生效)
+        # 若未配置分片规则的表，会自动适配找到对应的数据源。
+        # 若未配置分片规则的表，且多个数据源都存在，会以第一个为准。也可以配置check-duplicate-table-enabled在程序启动和更新时，是否检查重复表。重复则启动报错
+        #（sharding-jdbc4.1及以前都要配置默认数据库,或对表指定对应数据库）
+        default-database-strategy:
+          # standard：标准，complex：复合分片，hint：行表达式 ，none：无
+          standard:
+            sharding-column: id
+            sharding-algorithm-name: default-database-standard
+        # 分表默认分片策略（配置与上面同理）
+        default-table-strategy:
+          # 不做任何操作
+          none:
+        # 配置默认自增主键生成器
+        default-key-generate-strategy:
+          #自增列名称，缺省表示不使用自增主键生成器
+          column: id
+          #自增列值生成器类型，可使用用户自定义的列值生成器或选择内置类型：SNOWFLAKE/UUID
+          key-generator-name: snowflake
+
+        # 表规则配置
+        tables:
+          #具体表名-商品基本信息表
+          t_goods:
+            # 实际数据库节点,这里使用行表达式
+            actual-data-nodes: ds$->{0..1}.t_goods_$->{0..2}
+            # 配置分库策略
+            database-strategy:
+              # standard：标准，complex：复合分片，hint：行表达式 ，none：无
+              standard:
+                # 分片字段
+                sharding-column: id
+                # 分片规则,在sharding-algorithms下配置
+                sharding-algorithm-name: goods-database-inline
+            # 配置分表策略,与database-strategy配置同理
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: goods-table-inline
+#              # 分布式序列算法，这里可以自己自定义配置，否则会走全局默认配置
+#              key-generate-strategy:
+#                #自增列名称，缺省表示不使用自增主键生成器
+#                column: id
+#                #自增列值生成器类型，可使用用户自定义的列值生成器或选择内置类型：SNOWFLAKE/UUID
+#                key-generator-name: snowflake
+
+          #具体表名-用户表
+          t_user:
+            # 实际数据库节点
+            actual-data-nodes: ds$->{0..1}.t_user
+            # 分表,分库策略，自增主键生成器缺失，会走默认配置
+
+        # 配置 分片算法，可以是分库，也可以是分表
+        sharding-algorithms:
+          # 规则1
+          default-database-standard:
+            # 参考： https://shardingsphere.apache.org/document/5.0.0/cn/user-manual/shardingsphere-jdbc/configuration/built-in-algorithm/sharding/
+            # 常见的： INLINE:行表达式分片算法, COMPLEX_INLINE:复合行表达式分片算法, HINT_INLINE:（Hint行表达式分片算法）,CLASS_BASED:自定义类分片算法
+            type: INLINE
+            props:
+              # 注意，若分库分表字段相同，取模划分最好是不同的质数，避免不均匀散落
+              algorithm-expression: ds$->{id % 2}
+          # 规则2
+          goods-database-inline:
+            type: INLINE
+            props:
+              # 注意，若分库分表字段相同，取模划分最好是不同的质数，避免不均匀散落
+              algorithm-expression: ds$->{id % 2}
+          # 规则3
+          goods-table-inline:
+            type: INLINE
+            props:
+              algorithm-expression: t_goods_$->{id % 3}
+
+        # 配置 分布式序列算法
+        key-generators:
+          # 内置算法，雪花算法（SNOWFLAKE），UUID（UUID），参考：https://shardingsphere.apache.org/document/5.0.0/cn/user-manual/shardingsphere-jdbc/configuration/built-in-algorithm/keygen/
+          snowflake:
+            type: SNOWFLAKE
+            props:
+              # 工作机器唯一标识
+              worker-id: 123

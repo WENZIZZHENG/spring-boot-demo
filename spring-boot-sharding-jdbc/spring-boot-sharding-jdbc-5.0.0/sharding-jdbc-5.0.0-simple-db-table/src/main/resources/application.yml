@@ -1,0 +1,39 @@
+server:
+  # 端口
+  port: 7879
+
+spring:
+  profiles:
+    # sharding-jdbc配置
+    active: shardingjdbc5_simple
+  jackson:
+    # 日期格式器 jackson格式
+    date-format: yyyy-MM-dd HH:mm:ss
+    # 格林威冶标准时间 + 8 (北京时间)
+    time-zone: GMT+8
+
+#日志配置
+logging:
+  level:
+    root: info
+    com.example: debug
+    # swagger 2.9.2 版本报错问题
+    io.swagger.models.parameters.AbstractSerializableParameter: error
+
+# mybatis plus配置
+mybatis-plus:
+  global-config:
+    db-config:
+      #数据库ID自增
+      id-type: AUTO
+      #逻辑未删除 默认0  字段需要在@TableLogic注解
+      logic-not-delete-value: 0
+      #逻辑删除  默认1  字段需要在@TableLogic注解
+      logic-delete-value: 1
+  #包路径扫描
+  type-aliases-package: com.example.**.entity
+  configuration:
+    #驼峰命名
+    map-underscore-to-camel-case: true
+  #xml文件路径
+  mapper-locations: classpath:mapper/*.xml
