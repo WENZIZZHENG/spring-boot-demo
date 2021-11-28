@@ -14,6 +14,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>sharding-jdbc-5.0.0-simple-db-table</module>
+        <module>sharding-jdbc-5.0.0-db-table</module>
     </modules>
 
     <properties>
