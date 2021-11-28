@@ -3,13 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>spring-boot-sharding-jdbc-5.0.0</artifactId>
+        <artifactId>spring-boot-demo</artifactId>
         <groupId>com.example</groupId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sharding-jdbc-5.0.0-db-table</artifactId>
+    <artifactId>sharding-jdbc-4.1.1-db-table</artifactId>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,7 +21,7 @@
         <swagger.version>2.9.2</swagger.version>
         <swagger.bootstrap.ui.version>1.9.3</swagger.bootstrap.ui.version>
         <hutool.version>5.5.8</hutool.version>
-        <shardingsphere.version>5.0.0</shardingsphere.version>
+        <shardingsphere.version>4.1.1</shardingsphere.version>
     </properties>
 
     <dependencies>
@@ -36,11 +37,17 @@
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
 
-        <!-- 引入sharding JDBC  5.x版本的-->
+        <!-- 引入sharding JDBC  4.1.1版本-->
         <dependency>
             <groupId>org.apache.shardingsphere</groupId>
-            <artifactId>shardingsphere-jdbc-core-spring-boot-starter</artifactId>
+            <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
             <version>${shardingsphere.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>guava</artifactId>
+                    <groupId>com.google.guava</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- mybatis-plus启动器 -->
@@ -90,12 +97,6 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
             <version>${swagger.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>guava</artifactId>
-                    <groupId>com.google.guava</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
@@ -119,3 +120,4 @@
         </plugins>
     </build>
 </project>
+

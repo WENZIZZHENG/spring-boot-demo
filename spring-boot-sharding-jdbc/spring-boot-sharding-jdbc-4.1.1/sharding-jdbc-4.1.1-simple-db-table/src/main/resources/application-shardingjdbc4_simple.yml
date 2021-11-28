@@ -24,7 +24,7 @@ spring:
         username: root
         password: root
     sharding:
-      #todo 默认数据库,所有未配置分库规则的表，都会走这里（无论是否配置规则）
+      #默认数据库,所有未配置分库规则的表，都会走这里（无论是否有在tables中配置规则）
       default-data-source-name: ds1
       #默认分表规则，这里设置无，有需要可以参考下面tables的配置
       default-table-strategy:

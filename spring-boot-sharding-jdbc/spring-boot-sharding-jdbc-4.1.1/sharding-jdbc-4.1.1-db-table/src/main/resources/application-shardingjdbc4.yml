@@ -1,0 +1,81 @@
+spring:
+  # 数据源配置
+  shardingsphere:
+    props:
+      # 这里的其它属性，参考： 找不到。。。
+      sql:
+        show: true # 打印 SQL
+    # 数据源
+    datasource:
+      # 配置真实数据源
+      names: ds0,ds1
+      # 配置第 1 个数据源
+      ds0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/demo_ds_2?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: root
+      # 配置第 2 个数据源
+      ds1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/demo_ds_3?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: root
+    sharding:
+      #默认数据库,所有未配置分库规则的表，都会走这里（无论是否有在tables中配置规则）
+      default-data-source-name: ds1
+      #默认分表规则，这里设置无，有需要可以参考下面tables的配置
+      default-table-strategy:
+        none:
+      # 配置默认自增主键生成器
+      default-key-generator:
+        #自增列名称
+        column: id
+        # 内置算法，雪花算法（SNOWFLAKE），UUID（UUID），参考：找不到
+        type: SNOWFLAKE
+        props:
+          # 工作机器唯一标识
+          worker-id: 123
+
+      # 表规则配置
+      tables:
+        #具体表名-商品基本信息表
+        t_goods:
+          # 实际数据库节点,这里示例，2020年至于2023之间，按季度分表，格式 ds0.t_goods_2020_01_03...ds0.t_goods_2021_10_12...ds1.t_goods_2022_01_03..ds1.t_goods_2023_10_12
+          actual-data-nodes: ds0.t_goods_$->{2020..2021}_$->{['01_03', '04_06', '07_09', '10_12']},ds1.t_goods_$->{2022..2023}_$->{['01_03', '04_06', '07_09', '10_12']}
+          # 配置分库策略
+          database-strategy:
+            # 类型：  inline:行表达式分片算法，standard：标准，complex：复合分片，hint：强制分片路由算法 ，none：无
+            standard:
+              # 分片字段
+              sharding-column: create_time
+              #精确分片算法类名称，用于=和IN。该类需实现PreciseShardingAlgorithm接口并提供无参数的构造器
+              precise-algorithm-class-name: com.example.config.sharding.algorithm.PreciseModuloShardingDatabaseAlgorithm
+              #范围分片算法类名称，用于BETWEEN，大于，小于，大于小于，可选（如果需要选择这个，必须实现精确分片）。该类需实现RangeShardingAlgorithm接口并提供无参数的构造器
+              range-algorithm-class-name: com.example.config.sharding.algorithm.RangeModuloShardingDatabaseAlgorithm
+          # 配置分表策略,与database-strategy配置同理
+          table-strategy:
+            standard:
+              sharding-column: create_time
+              precise-algorithm-class-name: com.example.config.sharding.algorithm.PreciseModuloShardingTableAlgorithm
+              range-algorithm-class-name: com.example.config.sharding.algorithm.RangeModuloShardingTableAlgorithm
+          # 配置自增主键生成器
+          key-generator:
+            # 自增列名称，缺省表示不使用自增主键生成器
+            column: id
+            # 自增列值生成器类型，缺省表示使用默认自增列值生成器。可使用用户自定义的列值生成器或选择内置类型：SNOWFLAKE/UUID
+            # 这里是ShardingTableKeyGenerator类下的getType返回值
+            type: CUSTOM
+            props:
+              # 自定义属性
+              redis-prfix: id:goods
+        #具体表名-用户表
+        t_user:
+          # 实际数据库节点
+          actual-data-nodes: ds$->{0..1}.t_user
+          database-strategy:
+            inline:
+              sharding-column: id
+              algorithm-expression: ds$->{id % 2}
