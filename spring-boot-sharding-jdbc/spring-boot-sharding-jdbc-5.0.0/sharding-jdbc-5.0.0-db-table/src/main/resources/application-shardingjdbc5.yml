@@ -53,19 +53,21 @@ spring:
         tables:
           #具体表名-商品基本信息表
           t_goods:
-            # 实际数据库节点,这里示例，2020年至于2021之间，按季度分表，示例只分表不分库，格式 ds0.t_goods_2020_01_03,ds0.t_goods_2020_04_06...ds0.t_goods_2021_10_12
-            actual-data-nodes: ds0.t_goods_$->{2020..2021}_01_03,ds0.t_goods_$->{2020..2021}_04_06,ds0.t_goods_$->{2020..2021}_07_09,ds0.t_goods_$->{2020..2021}_10_12
+            # 实际数据库节点,这里示例，2020年至于2023之间，按季度分表，格式 ds0.t_goods_2020_01_03...ds0.t_goods_2021_10_12...ds1.t_goods_2022_01_03..ds1.t_goods_2023_10_12
+            actual-data-nodes: ds0.t_goods_$->{2020..2021}_$->{['01_03', '04_06', '07_09', '10_12']},ds1.t_goods_$->{2022..2023}_$->{['01_03', '04_06', '07_09', '10_12']}
             # 配置分库策略
             database-strategy:
-              none:
-            # 配置分表策略,与database-strategy配置同理
-            table-strategy:
               # standard：标准，complex：复合分片，hint：行表达式 ，none：无
               standard:
                 # 分片字段
                 sharding-column: create_time
                 # 分片规则,在sharding-algorithms下配置
-                sharding-algorithm-name: goods-table-inline
+                sharding-algorithm-name: goods-database-custom
+            # 配置分表策略,与database-strategy配置同理
+            table-strategy:
+              standard:
+                sharding-column: create_time
+                sharding-algorithm-name: goods-table-custom
             # 分布式序列算法，这里可以自己自定义配置，否则会走全局默认配置
             key-generate-strategy:
               #自增列名称，缺省表示不使用自增主键生成器
@@ -89,13 +91,22 @@ spring:
               # 注意，若分库分表字段相同，取模划分最好是不同的质数，避免不均匀散落
               algorithm-expression: ds$->{id % 2}
           # 规则2
-          goods-table-inline:
+          goods-database-custom:
             # 这里使用自定义规则
             type: CLASS_BASED
             props:
               # 分片策略类型，支持STANDARD、COMPLEX或HINT（不区分大小写）
               strategy: STANDARD
-              # 类路径,在resources.META-INF.services中也要配置SPI
+              # 类路径,在resources/META-INF/services中也要配置SPI
+              algorithmClassName: com.example.config.sharding.algorithm.StandardModuloShardingDatabaseAlgorithm
+          # 规则3
+          goods-table-custom:
+            # 这里使用自定义规则
+            type: CLASS_BASED
+            props:
+              # 分片策略类型，支持STANDARD、COMPLEX或HINT（不区分大小写）
+              strategy: STANDARD
+              # 类路径,在resources/META-INF/services中也要配置SPI
               algorithmClassName: com.example.config.sharding.algorithm.StandardModuloShardingTableAlgorithm
 
         # 配置 分布式序列算法

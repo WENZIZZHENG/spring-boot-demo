@@ -68,12 +68,12 @@ spring:
               standard:
                 sharding-column: id
                 sharding-algorithm-name: goods-table-inline
-#              # 分布式序列算法，这里可以自己自定义配置，否则会走全局默认配置
-#              key-generate-strategy:
-#                #自增列名称，缺省表示不使用自增主键生成器
-#                column: id
-#                #自增列值生成器类型，可使用用户自定义的列值生成器或选择内置类型：SNOWFLAKE/UUID
-#                key-generator-name: snowflake
+            ## 分布式序列算法，这里可以自己自定义配置，否则会走全局默认配置
+            #key-generate-strategy:
+              ##自增列名称，缺省表示不使用自增主键生成器
+              #column: id
+              ##自增列值生成器类型，可使用用户自定义的列值生成器或选择内置类型：SNOWFLAKE/UUID
+              #key-generator-name: snowflake
 
           #具体表名-用户表
           t_user:

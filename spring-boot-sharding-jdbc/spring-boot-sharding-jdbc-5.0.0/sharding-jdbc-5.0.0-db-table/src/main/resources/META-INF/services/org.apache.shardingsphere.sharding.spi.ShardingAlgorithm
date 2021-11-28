@@ -1,1 +1,2 @@
 com.example.config.sharding.algorithm.StandardModuloShardingTableAlgorithm
+com.example.config.sharding.algorithm.StandardModuloShardingDatabaseAlgorithm

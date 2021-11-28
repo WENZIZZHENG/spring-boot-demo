@@ -125,6 +125,7 @@ public final class StandardModuloShardingTableAlgorithm implements StandardShard
                 }
             }
         } else if (startDate != null) {
+            // 用于 create_time >= startDate 或 create_time > startDate
             //[2020-10-28 15:41:26..+∞)
             //年 2020
             String startYear = CommonUtil.date2QuarterStr(startDate);
@@ -146,6 +147,7 @@ public final class StandardModuloShardingTableAlgorithm implements StandardShard
                 }
             }
         } else if (endDate != null) {
+            // 用于 create_time <= endDate 或 create_time < endDate
             //(-∞..2021-11-28 15:41:26]
             //年 2021
             String endYear = CommonUtil.date2QuarterStr(endDate);
