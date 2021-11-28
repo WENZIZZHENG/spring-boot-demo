@@ -1,12 +1,13 @@
 package com.example.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * <p>
@@ -23,7 +24,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @TableName("t_system")
 @ApiModel(value = "System对象", description = "系统配置表格")
-public class System implements Serializable {
+public class System extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -36,23 +37,5 @@ public class System implements Serializable {
 
     @ApiModelProperty(value = "系统配置值")
     private String keyValue;
-
-    @ApiModelProperty(value = "创建时间")
-    private Date createTime;
-
-    @ApiModelProperty(value = "创建者")
-    private String createName;
-
-    @ApiModelProperty(value = "更新时间")
-    private Date updateTime;
-
-    @ApiModelProperty(value = "修改者")
-    private String updateName;
-
-    @TableLogic
-    @TableField(select = false)
-    @ApiModelProperty(value = "逻辑删除")
-    private Boolean deleted;
-
 
 }

@@ -31,34 +31,36 @@ public class MybatisPlusConfig implements MetaObjectHandler {
     }
 
 
+    /***
+     * mybatis-plus 自动填充-新增时触发
+     */
     @Override
     public void insertFill(MetaObject metaObject) {
-        if (metaObject.hasSetter("createName")) {
+        //为空时，才自动填充
+        if (metaObject.getValue("createName") == null) {
             setFieldValByName("createName", "MrWen", metaObject);
         }
-        if (metaObject.hasSetter("updateName")) {
+        if (metaObject.getValue("updateName") == null) {
             setFieldValByName("updateName", "MrWen", metaObject);
         }
 
-        //有createTime属性的时候，才进行自动填充
-        if (metaObject.hasSetter("createTime")) {
+        if (metaObject.getValue("createTime") == null) {
             setFieldValByName("createTime", new Date(), metaObject);
         }
 
-        if (metaObject.hasSetter("updateTime")) {
+        if (metaObject.getValue("updateTime") == null) {
             setFieldValByName("updateTime", new Date(), metaObject);
         }
     }
 
+    /***
+     * mybatis-plus 自动填充-修改时触发
+     */
     @Override
     public void updateFill(MetaObject metaObject) {
+        //直接修改
+        setFieldValByName("updateName", "MrWen", metaObject);
 
-        if (metaObject.hasSetter("updateName")) {
-            setFieldValByName("updateName", "MrWen", metaObject);
-        }
-
-        if (metaObject.hasSetter("updateTime")) {
-            setFieldValByName("updateTime", new Date(), metaObject);
-        }
+        setFieldValByName("updateTime", new Date(), metaObject);
     }
 }

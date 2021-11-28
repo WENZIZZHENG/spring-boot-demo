@@ -1,9 +1,12 @@
 package com.example.config.sharding.key;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.example.service.IRedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shardingsphere.sharding.spi.KeyGenerateAlgorithm;
+
+import java.util.Properties;
 
 
 /**
@@ -20,6 +23,7 @@ public class ShardingTableKeyGenerator implements KeyGenerateAlgorithm {
 
     private String redisKey;
 
+    private Properties properties = new Properties();
 
     /**
      * mall_admin表的主键生成器
@@ -29,6 +33,11 @@ public class ShardingTableKeyGenerator implements KeyGenerateAlgorithm {
     @Override
     public Comparable<?> generateKey() {
         //手动注入redisService,在init初始化时，Bean并没有加载
+
+        if (StrUtil.isBlank(redisKey)) {
+            redisKey = getProps().getProperty("redis-prfix");
+        }
+
         if (redisService == null) {
             redisService = SpringUtil.getBean(IRedisService.class);
         }
@@ -40,10 +49,21 @@ public class ShardingTableKeyGenerator implements KeyGenerateAlgorithm {
 
     @Override
     public void init() {
-        redisKey = getProps().getProperty("redis-prfix");
-        log.info("==================初始化ShardingTableKeyGenerator成功==================");
+        //todo redis key 注入失败？先给个默认值，后续再改正
+        String propertyKey = getProps().getProperty("redis-prfix");
+        redisKey = getProps().getProperty("redis-prfix", "id:goods");
+        log.info("==================初始化ShardingTableKeyGenerator成功,propertyKey={}==================", propertyKey);
     }
 
+    @Override
+    public Properties getProps() {
+        return properties;
+    }
+
+    @Override
+    public void setProps(Properties props) {
+        this.properties = props;
+    }
 
     /**
      * 声明类型

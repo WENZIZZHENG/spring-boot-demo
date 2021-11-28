@@ -25,7 +25,7 @@ spring:
         min-idle: 1
         # 连接池中的最大空闲连接
         max-idle: 100
-    host: 42.194.183.221
+    host: 127.0.0.1
     port: 6379
     database: 2
 

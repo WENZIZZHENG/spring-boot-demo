@@ -1,13 +1,14 @@
 package com.example.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * <p>
@@ -24,7 +25,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @TableName("t_goods")
 @ApiModel(value = "Goods对象", description = "商品基本信息表")
-public class Goods implements Serializable {
+public class Goods extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -50,21 +51,5 @@ public class Goods implements Serializable {
     @ApiModelProperty(value = "零售价格")
     private BigDecimal retailPrice;
 
-    @ApiModelProperty(value = "创建时间")
-    private Date createTime;
-
-    @ApiModelProperty(value = "创建者")
-    private String createName;
-
-    @ApiModelProperty(value = "更新时间")
-    private Date updateTime;
-
-    @ApiModelProperty(value = "修改者")
-    private String updateName;
-
-    @TableLogic
-    @TableField(select = false)
-    @ApiModelProperty(value = "逻辑删除")
-    private Boolean deleted;
 
 }
