@@ -1,0 +1,70 @@
+spring:
+  # 数据源配置
+  shardingsphere:
+    props:
+      # 这里的其它属性，参考： 找不到。。。
+      sql:
+        show: true # 打印 SQL
+    # 数据源
+    datasource:
+      # 配置真实数据源
+      names: ds0,ds1
+      # 配置第 1 个数据源
+      ds0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/demo_ds_0?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: root
+      # 配置第 2 个数据源
+      ds1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/demo_ds_1?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: root
+    sharding:
+      #todo 默认数据库,所有未配置分库规则的表，都会走这里（无论是否配置规则）
+      default-data-source-name: ds1
+      #默认分表规则，这里设置无，有需要可以参考下面tables的配置
+      default-table-strategy:
+        none:
+      # 配置默认自增主键生成器
+      default-key-generator:
+        #自增列名称
+        column: id
+        # 内置算法，雪花算法（SNOWFLAKE），UUID（UUID），参考：找不到
+        type: SNOWFLAKE
+        props:
+          # 工作机器唯一标识
+          worker-id: 123
+
+      # 表规则配置
+      tables:
+        #具体表名-商品基本信息表
+        t_goods:
+          # 实际数据库节点,这里使用行表达式
+          actual-data-nodes: ds$->{0..1}.t_goods_$->{0..2}
+          # 配置分库策略
+          database-strategy:
+            # 类型：  inline:行表达式分片算法，standard：标准，complex：复合分片，hint：强制分片路由算法 ，none：无
+            inline:
+              # 分片字段
+              sharding-column: id
+              # 行表达式分片算法
+              algorithm-expression: ds$->{id % 2}
+          # 配置分表策略,与database-strategy配置同理
+          table-strategy:
+            inline:
+              sharding-column: id
+              algorithm-expression: t_goods_$->{id % 3}
+
+        #具体表名-用户表
+        t_user:
+          # 实际数据库节点
+          actual-data-nodes: ds$->{0..1}.t_user
+          database-strategy:
+            inline:
+              sharding-column: id
+              algorithm-expression: ds$->{id % 2}
+

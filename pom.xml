@@ -18,6 +18,7 @@
         <module>spring-boot-sharding-jdbc</module>
         <module>spring-boot-sharding-jdbc/spring-boot-sharding-jdbc-5.0.0</module>
         <module>spring-boot-sharding-jdbc/spring-boot-sharding-jdbc-4.1.1</module>
+        <module>spring-boot-sharding-jdbc/spring-boot-sharding-jdbc-4.1.1/sharding-jdbc-4.1.1-simple-db-table</module>
     </modules>
 
     <properties>
