@@ -2,9 +2,9 @@
 
 
 
-## 概述
+## 1 概述
 
-**ShardingSphere-JDBC**
+**1.1 ShardingSphere-JDBC**
 
 定位为轻量级 Java 框架，在 Java 的 JDBC 层提供的额外服务。 它使用客户端直连数据库，以 jar 包形式提供服务，无需额外部署和依赖，可理解为增强版的 JDBC 驱动，完全兼容 JDBC 和各种 ORM 框架。
 
@@ -16,24 +16,29 @@
 
 详情参考： [官网](https://shardingsphere.apache.org/index_zh.html)
 
-## 注意事项
+## 2 注意事项
 
 1.  版本问题：Sharding-JDBC不同版本之间配置文件差异很大，请确定好自身需要的版本
 2.  常见的问题，[详情参考官网FAQ](https://shardingsphere.apache.org/document/5.0.0/cn/reference/faq/)
 
 
 
-### 常见问题
+## 3 常见问题
 
-#### [为什么配置了某个数据连接池的 spring-boot-starter（比如 druid）和 shardingsphere-jdbc-spring-boot-starter 时，系统启动会报错？](https://shardingsphere.apache.org/document/5.0.0/cn/reference/faq/#1-jdbc-为什么配置了某个数据连接池的-spring-boot-starter比如-druid和-shardingsphere-jdbc-spring-boot-starter-时系统启动会报错)
+#### 3.1 [为什么配置了某个数据连接池的 spring-boot-starter（比如 druid）和 shardingsphere-jdbc-spring-boot-starter 时，系统启动会报错？](https://shardingsphere.apache.org/document/5.0.0/cn/reference/faq/#1-jdbc-为什么配置了某个数据连接池的-spring-boot-starter比如-druid和-shardingsphere-jdbc-spring-boot-starter-时系统启动会报错)
+
+``` tex
+回答：
+
+1. 因为数据连接池的 starter（比如 druid）可能会先加载并且其创建一个默认数据源，这将会使得 ShardingSphere-JDBC 创建数据源时发生冲突。
+2. 解决办法为，去掉数据连接池的 starter 即可，ShardingSphere-JDBC 自己会创建数据连接池。
+```
 
 
 
+### **3.2 分布式主键自增方案**
 
-
-### **分布式主键自增方案**
-
-#### **1 雪花算法**
+#### **3.2.1 雪花算法**
 
 ```tex
 1：Sharding-jdbc有内置雪花算法：SNOWFLAKE，详情请看sharding-jdbc-5.0.0-db-table或sharding-jdbc-4.1.1-db-table配置文件
@@ -46,7 +51,7 @@
 
 **[雪花算法ID到前端之后精度丢失问题，全局解决方案](https://github.com/WENZIZZHENG/spring-boot-demo/blob/master/spring-boot-sharding-jdbc/spring-boot-sharding-jdbc-5.0.0/sharding-jdbc-5.0.0-db-table/src/main/java/com/example/config/JacksonConfig.java)**
 
-#### **2 redis自增主键**
+#### **3.2.2 redis自增主键**
 
 ```tex
 1: 在对旧代码改造时，原来表主键为数据库自增且类型是Integer，不想对原来代码进行改动时推荐使用redis自增。
@@ -63,7 +68,7 @@ Service Provider Interface (SPI) 是一种为了被第三方实现或扩展的 A
 
 
 
-### 启动报错Correct the classpath of your application so that it contains a single, compatible version of com.google.common.collect.FluentIterable
+### 3.3 启动报错Correct the classpath of your application so that it contains a single, compatible version of com.google.common.collect.FluentIterable
 
 **完整信息**
 
@@ -113,11 +118,11 @@ guava版本冲突
 
 
 
-## **其它参考**
+## **4 其它参考**
 
 1. [4.0.0-RC1版本Demo参考](https://github.com/yinjihuan/sharding-jdbc)
 
-## 待补充
+## 5 待补充
 
 1. 复合分片，强制路由分片规则
 2. 读写分离
