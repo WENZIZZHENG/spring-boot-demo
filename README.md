@@ -17,6 +17,10 @@
 
 ```
 spring-boot-demo
+  ├── spring-boot-mybatis-plus                     #常见问题，注意事项,参考资料，待补充
+  │   ├── spring-boot-mybatis-plus-demo            #mybatis-plus 企业级应用，待补充
+  │   ├── spring-boot-mybatis-plus-generate        #mybatis-plus 代码生成器，自定义模板
+  │   └── spring-boot-mybatis-plus-simple          #mybatis-plus 快速入门
   ├── spring-boot-sharding-jdbc                    #常见问题，注意事项,参考资料
   │   ├── spring-boot-sharding-jdbc-5.0.0
   │   │   ├── sharding-jdbc-5.0.0-simple-db-table  #分库分表快速入门版
@@ -29,5 +33,6 @@ spring-boot-demo
 
 **示例代码**
 
+- [spring-boot-mybatis-plus示例](https://github.com/WENZIZZHENG/spring-boot-demo/tree/master/spring-boot-mybatis-plus)
 - [spring-boot-sharding-jdbc示例](https://github.com/WENZIZZHENG/spring-boot-demo/tree/master/spring-boot-sharding-jdbc)
 
