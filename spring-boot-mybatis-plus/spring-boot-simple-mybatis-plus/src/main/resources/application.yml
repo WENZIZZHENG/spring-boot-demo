@@ -1,0 +1,67 @@
+mybatis-plus:
+  #实体类包路径扫描,启动类记得加上 @MapperScan("com.example.mapper")
+  type-aliases-package: com.example.entity
+  configuration:
+    #驼峰命名
+    map-underscore-to-camel-case: true
+  #xml文件路径,多个以逗号分割
+  mapper-locations: classpath:mapper/*.xml,classpath*:/mapper/**/*.xml
+
+spring:
+  # druid数据源整合数据源配置
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    druid:
+      url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+      username: root
+      password: root
+      # 初始连接数
+      initialSize: 5
+      # 最小连接池数量
+      minIdle: 10
+      # 最大连接池数量
+      maxActive: 20
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      # 配置一个连接在池中最大生存的时间，单位是毫秒
+      maxEvictableIdleTimeMillis: 900000
+      # 配置检测连接是否有效  Oracle: select 1 from dual    MySql: select 1
+      validationQuery: SELECT 1
+      # 建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+      testWhileIdle: true
+      # 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+      testOnBorrow: false
+      # 归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+      testOnReturn: false
+      webStatFilter:
+        enabled: true
+      statViewServlet:
+        enabled: true
+        # 设置白名单，不填则允许所有访问
+        allow: ""
+        url-pattern: /druid/*
+        # 控制台管理用户名和密码
+        login-username: admin
+        login-password: admin
+      filter:
+        stat:
+          enabled: true
+          # 慢SQL记录
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true
+
+
+#日志配置
+logging:
+  level:
+    root: info
+    com.example: debug

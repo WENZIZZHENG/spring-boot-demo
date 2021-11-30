@@ -73,9 +73,6 @@ Service Provider Interface (SPI) 是一种为了被第三方实现或扩展的 A
 **完整信息**
 
 ```te
-Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
-2021-11-28 23:13:29.142 ERROR 20388 --- [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
-
 ***************************
 APPLICATION FAILED TO START
 ***************************

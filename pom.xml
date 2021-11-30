@@ -14,6 +14,8 @@
         <module>spring-boot-sharding-jdbc/spring-boot-sharding-jdbc-4.1.1</module>
         <module>spring-boot-sharding-jdbc/spring-boot-sharding-jdbc-4.1.1/sharding-jdbc-4.1.1-simple-db-table</module>
         <module>spring-boot-sharding-jdbc/spring-boot-sharding-jdbc-4.1.1/sharding-jdbc-4.1.1-db-table</module>
+        <module>spring-boot-mybatis-plus</module>
+        <module>spring-boot-mybatis-plus/spring-boot-simple-mybatis-plus</module>
     </modules>
 
     <properties>
