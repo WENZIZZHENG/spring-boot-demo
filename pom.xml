@@ -18,6 +18,7 @@
         <module>spring-boot-mybatis-plus/spring-boot-mybatis-plus-simple</module>
         <module>spring-boot-mybatis-plus/spring-boot-mybatis-plus-generate</module>
         <module>spring-boot-mybatis-plus/spring-boot-mybatis-plus-demo</module>
+        <module>spring-boot-mybatis-plus/spring-boot-mybatis-plus-dynamic-datasource-demo</module>
     </modules>
 
     <properties>
