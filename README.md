@@ -17,10 +17,11 @@
 
 ```
 spring-boot-demo
-  ├── spring-boot-mybatis-plus                     #常见问题，注意事项,参考资料，待补充
-  │   ├── spring-boot-mybatis-plus-demo            #mybatis-plus 企业级应用，待补充
-  │   ├── spring-boot-mybatis-plus-generate        #mybatis-plus 代码生成器，自定义模板
-  │   └── spring-boot-mybatis-plus-simple          #mybatis-plus 快速入门
+  ├── spring-boot-mybatis-plus                                 #常见问题，注意事项,参考资料，待补充
+  │   ├── spring-boot-mybatis-plus-demo                        #mybatis-plus 企业级应用
+  │	  ├── spring-boot-mybatis-plus-dynamic-datasourc-demo      #mybatis-plus 多数据源，待补充
+  │   ├── spring-boot-mybatis-plus-generate                    #mybatis-plus 代码生成器，自定义模板
+  │   └── spring-boot-mybatis-plus-simple                      #mybatis-plus 快速入门
   ├── spring-boot-sharding-jdbc                    #常见问题，注意事项,参考资料
   │   ├── spring-boot-sharding-jdbc-5.0.0
   │   │   ├── sharding-jdbc-5.0.0-simple-db-table  #分库分表快速入门版
@@ -33,7 +34,17 @@ spring-boot-demo
 
 **示例代码**
 
-- [spring-boot-mybatis-plus示例](spring-boot-demo/tree/master/spring-boot-mybatis-plus)
-- [spring-boot-sharding-jdbc示例](/spring-boot-demo/tree/master/spring-boot-sharding-jdbc)
-- [spring-boot-sharding-jdbc示例](/spring-boot-demo/tree/master/spring-boot-sharding-jdbc/README.md)
+- [spring-boot-mybatis-plus示例](https://github.com/WENZIZZHENG/spring-boot-demo/tree/master/spring-boot-mybatis-plus)
+
+1.  mybatis-plus 快速入门
+2.  mybatis-plus 代码生成器，自定义模板
+3.  mybatis-plus 多租户，自动分页，乐观锁，防止全表更新与删除，动态表名，sql性能规范，自定义ID生成器，数据填充，枚举等
+4.  mybatis-plus 多数据源，待补充
+
+- [spring-boot-sharding-jdbc示例](https://github.com/WENZIZZHENG/spring-boot-demo/tree/master/spring-boot-sharding-jdbc)
+
+1.  分库分表快速入门（4.1.1版本以及5.0.0版本）
+2.  自定义分库分表规则，自定义自增主键
+3.  与mybatis-plus整合，解决更新时触发分片规则报错问题
+4.  spring-boot-starter-jooq整合sharding-jdbc常见问题及解决方案
 

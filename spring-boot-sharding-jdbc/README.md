@@ -25,20 +25,9 @@
 
 ## 3 常见问题
 
-#### 3.1 [为什么配置了某个数据连接池的 spring-boot-starter（比如 druid）和 shardingsphere-jdbc-spring-boot-starter 时，系统启动会报错？](https://shardingsphere.apache.org/document/5.0.0/cn/reference/faq/#1-jdbc-为什么配置了某个数据连接池的-spring-boot-starter比如-druid和-shardingsphere-jdbc-spring-boot-starter-时系统启动会报错)
+### **3.1 分布式主键自增方案**
 
-``` tex
-回答：
-
-1. 因为数据连接池的 starter（比如 druid）可能会先加载并且其创建一个默认数据源，这将会使得 ShardingSphere-JDBC 创建数据源时发生冲突。
-2. 解决办法为，去掉数据连接池的 starter 即可，ShardingSphere-JDBC 自己会创建数据连接池。
-```
-
-
-
-### **3.2 分布式主键自增方案**
-
-#### **3.2.1 雪花算法**
+#### **3.1.1 雪花算法**
 
 ```tex
 1：Sharding-jdbc有内置雪花算法：SNOWFLAKE，详情请看sharding-jdbc-5.0.0-db-table或sharding-jdbc-4.1.1-db-table配置文件
@@ -51,7 +40,7 @@
 
 **[雪花算法ID到前端之后精度丢失问题，全局解决方案](https://github.com/WENZIZZHENG/spring-boot-demo/blob/master/spring-boot-sharding-jdbc/spring-boot-sharding-jdbc-5.0.0/sharding-jdbc-5.0.0-db-table/src/main/java/com/example/config/JacksonConfig.java)**
 
-#### **3.2.2 redis自增主键**
+#### **3.1.2 redis自增主键**
 
 ```tex
 1: 在对旧代码改造时，原来表主键为数据库自增且类型是Integer，不想对原来代码进行改动时推荐使用redis自增。
@@ -68,7 +57,66 @@ Service Provider Interface (SPI) 是一种为了被第三方实现或扩展的 A
 
 
 
-### 3.3 启动报错Correct the classpath of your application so that it contains a single, compatible version of com.google.common.collect.FluentIterable
+### **3.2 mybatis-plus更新时，触发分片字段怎么办**
+
+方案一: mybatis-plus更新前，把分片字段设为null。默认null时会跳过set。
+方案二: 使用自定义[mybatis拦截器](https://github.com/WENZIZZHENG/spring-boot-demo/blob/master/spring-boot-sharding-jdbc/spring-boot-sharding-jdbc-5.0.0/sharding-jdbc-5.0.0-db-table/src/main/java/com/example/config/MybatisPluginCustomInterceptor.java)，在拦截器中把分片字段set为空即可。（注意，mybatis-plus自动填功在这里是不能解决这个问题的）
+
+
+
+### 3.3 spring-boot-starter-jooq与shardingsphere-jdbc整合问题
+
+#### 3.3.1 spring-boot-starter-jooq生成的代码自带Schema处理
+
+```tex
+SQL示例:若Schema为test，表名为 t_user
+select 'test'.'t_user'.'name','test'.'t_user'.'password' from 'test'.'t_user'
+```
+
+解决方案,设全局配置即可,参考
+
+```java
+@Component
+public class JooqDao {
+
+    @Autowired
+    DSLContext create;
+
+    @PostConstruct
+    private void init() {
+        //去掉sql中的单引号,这个加上会导致新增时字段为空时，sql解析错误
+//        create.settings().withRenderNameStyle(RenderNameStyle.AS_IS);
+        //去掉Schema
+        create.settings().withRenderSchema(false);
+        System.out.println("==========================初始化DSLContext成功==========================");
+    }
+}
+```
+
+#### 3.3.2 生成删除的sql语句时自带表别名
+
+SQL示例：delete t0 from order_item t0 where t0.order_id = ?
+
+[sharding-jdbc 中的issues](https://github.com/apache/shardingsphere/issues/13273)
+
+解决方案，直接使用**5.0.0**以上版本
+
+
+
+### 3.4 [为什么配置了某个数据连接池的 spring-boot-starter（比如 druid）和 shardingsphere-jdbc-spring-boot-starter 时，系统启动会报错？](https://shardingsphere.apache.org/document/5.0.0/cn/reference/faq/#1-jdbc-为什么配置了某个数据连接池的-spring-boot-starter比如-druid和-shardingsphere-jdbc-spring-boot-starter-时系统启动会报错)
+
+``` tex
+回答：
+
+1. 因为数据连接池的 starter（比如 druid）可能会先加载并且其创建一个默认数据源，这将会使得 ShardingSphere-JDBC 创建数据源时发生冲突。
+2. 解决办法为，去掉数据连接池的 starter 即可，ShardingSphere-JDBC 自己会创建数据连接池。
+```
+
+
+
+
+
+### 3.5 启动报错Correct the classpath of your application so that it contains a single, compatible version of com.google.common.collect.FluentIterable
 
 **完整信息**
 
