@@ -95,6 +95,17 @@ public class GoodsController {
         return this.goodsService.getById(goods.getId());
     }
 
+    @PostMapping("/update")
+    @ApiOperation("修改含分片字段属性")
+    public Boolean update(@ApiParam("主键") @RequestParam("id") Long id, @ApiParam("修改商品名词") @RequestParam("name") String name) {
+        Goods goods = this.goodsService.getById(id);
+        //这里全量修改，模拟修改分片字段 create_time 的情况。
+        //这里会经历MybatisPluginCustomInterceptor拦截器清空 分片字段 create_time
+        //后续mybatis-plus更新时会跳过null值
+        goods.setName(name);
+        return this.goodsService.updateById(goods);
+    }
+
 
     @PostMapping("/delete/{id}")
     @ApiOperation("删除")
