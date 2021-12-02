@@ -7,7 +7,9 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.example.entity.base.BaseEntity;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * <p>
@@ -23,6 +25,10 @@ public class CodeGenerator {
         String packageParentPath = "com.example";
         //设置作者
         String author = "MrWen";
+        //需要生成的表
+        List<String> tableList = Arrays.asList("t_admin", "t_user");
+        //设置过滤表前缀
+        String tablePrefix = "t_";
 
         //项目当前路径,单体项目直接这样就可以。
 //        String projectPath = System.getProperty("user.dir");
@@ -53,8 +59,8 @@ public class CodeGenerator {
 
                 //策略配置
                 .strategyConfig(builder -> {
-                    builder.addInclude("t_admin") // 设置需要生成的表名
-                            .addTablePrefix("t_") // 设置过滤表前缀
+                    builder.addInclude(tableList) // 设置需要生成的表名
+                            .addTablePrefix(tablePrefix) // 设置过滤表前缀
 
                             //controller配置
                             .controllerBuilder()

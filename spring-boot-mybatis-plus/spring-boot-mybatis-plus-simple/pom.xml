@@ -13,18 +13,10 @@
 
 
     <properties>
-		<spring-boot-version>2.3.2.RELEASE</spring-boot-version>
+        <spring-boot-version>2.3.2.RELEASE</spring-boot-version>
         <mybatis.plus.version>3.4.2</mybatis.plus.version>
         <mysql.connector.version>8.0.16</mysql.connector.version>
         <druid.version>1.2.6</druid.version>
-        <mybatis.plus.generator.version>3.5.1</mybatis.plus.generator.version>
-        <velocity.engine.core.version>2.3</velocity.engine.core.version>
-        <freemarker.version>2.3.31</freemarker.version>
-        <swagger.version>2.9.2</swagger.version>
-        <swagger.bootstrap.ui.version>1.9.3</swagger.bootstrap.ui.version>
-        <hutool.version>5.5.8</hutool.version>
-        <p6spy.version>3.9.1</p6spy.version>
-        <ds.version>3.3.6</ds.version>
     </properties>
 
 
@@ -71,5 +63,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
