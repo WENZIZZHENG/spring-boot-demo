@@ -34,6 +34,6 @@ spring-boot-demo
 **示例代码**
 
 - [spring-boot-mybatis-plus示例](spring-boot-demo/tree/master/spring-boot-mybatis-plus)
-- [spring-boot-sharding-jdbc示例](spring-boot-demo/tree/master/spring-boot-sharding-jdbc)
-- [spring-boot-sharding-jdbc示例](spring-boot-demo/tree/master/spring-boot-sharding-jdbc/README.md)
+- [spring-boot-sharding-jdbc示例](/spring-boot-demo/tree/master/spring-boot-sharding-jdbc)
+- [spring-boot-sharding-jdbc示例](/spring-boot-demo/tree/master/spring-boot-sharding-jdbc/README.md)
 
