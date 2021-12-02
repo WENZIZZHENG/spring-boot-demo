@@ -1,0 +1,96 @@
+server:
+  port: 8080
+
+
+#日志配置
+logging:
+  level:
+    root: info
+    com.example: debug
+    # swagger 2.9.2 版本报错问题
+    io.swagger.models.parameters.AbstractSerializableParameter: error
+
+# 数据源配置
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    druid:
+      url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+      username: root
+      password: root
+      # 初始连接数
+      initialSize: 5
+      # 最小连接池数量
+      minIdle: 10
+      # 最大连接池数量
+      maxActive: 20
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      # 配置一个连接在池中最大生存的时间，单位是毫秒
+      maxEvictableIdleTimeMillis: 900000
+      # 配置检测连接是否有效  Oracle: select 1 from dual    MySql: select 1
+      validationQuery: SELECT 1
+      # 建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+      testWhileIdle: true
+      # 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+      testOnBorrow: false
+      # 归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+      testOnReturn: false
+      webStatFilter:
+        enabled: true
+      statViewServlet:
+        enabled: true
+        # 设置白名单，不填则允许所有访问
+        allow: ""
+        url-pattern: /druid/*
+        # 控制台管理用户名和密码
+        login-username: admin
+        login-password: admin
+      filter:
+        stat:
+          enabled: true
+          # 慢SQL记录
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true
+
+#mybatis-plus配置
+mybatis-plus:
+  global-config:
+    db-config:
+      #全局id策略 雪花id，只有当插入对象ID 为空，才自动填充。
+      id-type: ASSIGN_ID
+      #逻辑未删除 默认0  字段需要在@TableLogic注解
+      logic-not-delete-value: 0
+      #逻辑删除  默认1  字段需要在@TableLogic注解
+      logic-delete-value: 1
+      #表明前缀,没啥用
+      #table-prefix: mp_
+      #(not_null)修改时候，非NULL判断。建议使用默认(DEFAULT)的，不要配置这个
+      #(update-strategy: not_null
+  #包路径扫描,启动类记得加上 @MapperScan("com.example.mapper")，不然每个mapper需要加上@Repository
+  type-aliases-package: com.example.entity
+  configuration:
+    #驼峰命名
+    map-underscore-to-camel-case: true
+    #Sql执行分析示例，官方,也可以自定义。如果配置了logging，可以无视这个
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 这里演示自定义日志，把太长的sql屏蔽了
+    log-impl: com.example.config.MybatisLog
+    #使用IEnum或注解的方式
+    default-enum-type-handler: com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler
+  #xml文件路径,多个以逗号分割
+  mapper-locations: classpath:mapper/*.xml,classpath*:/mapper/**/*.xml
+
+
