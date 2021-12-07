@@ -1,0 +1,118 @@
+server:
+  port: 8081
+
+
+#日志配置
+logging:
+  level:
+    root: info
+    com.example: debug
+    # swagger 2.9.2 版本报错问题
+    io.swagger.models.parameters.AbstractSerializableParameter: error
+
+spring:
+  jackson:
+    # 时间格式
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  # 数据源配置
+  datasource:
+    druid:
+      stat-view-servlet:
+        enabled: true
+    #文档 https://www.kancloud.cn/tracy5546/dynamic-datasource/2264611
+    dynamic:
+      #必须设置默认的库,默认master
+      primary: master
+      #是否启用严格模式,默认不启动. 严格模式下未匹配到数据源直接报错, 非严格模式下则使用默认数据源primary所设置的数据源
+      strict: true
+      #是否使用p6spy输出，SQL分析,建议线上关闭，有性能损耗
+      p6spy: true
+      #是否懒加载数据源,默认false非懒启动，系统加载到数据源立即初始化连接池（没事都设false）
+      lazy: false
+      #负载均衡策略 https://www.kancloud.cn/tracy5546/dynamic-datasource/2268604
+      #LoadBalanceDynamicDataSourceStrategy 轮询,是默认的。  RandomDynamicDataSourceStrategy 随机的。
+      strategy: com.baomidou.dynamic.datasource.strategy.LoadBalanceDynamicDataSourceStrategy
+      # 全局默认publicKey,加密，参考 com.example.service.DynamicTest  参考文章： https://www.kancloud.cn/tracy5546/dynamic-datasource/2280963
+      public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKJt4oOGIXhofnDPs90cHkgrsaN+ryxv+eNbJJeKs6FTccoBdXEPNLuwzGS2ScSDkr601wycJWlVO7EIjnVXAUsCAwEAAQ==
+      druid:
+        # druid的全局配置，在指定的数据库中也可以单独配置
+        # 初始连接数
+        initialSize: 5
+        # 最小连接池数量
+        minIdle: 10
+        # 最大连接池数量
+        maxActive: 20
+        # 配置获取连接等待超时的时间
+        maxWait: 60000
+        # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+        timeBetweenEvictionRunsMillis: 60000
+        # 配置一个连接在池中最小生存的时间，单位是毫秒
+        minEvictableIdleTimeMillis: 300000
+        # 配置一个连接在池中最大生存的时间，单位是毫秒
+        maxEvictableIdleTimeMillis: 900000
+        # 配置检测连接是否有效  Oracle: select 1 from dual    MySql: select 1
+        validationQuery: SELECT 1
+        # 建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+        testWhileIdle: true
+        # 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+        testOnBorrow: false
+        # 归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+        testOnReturn: false
+      datasource:
+        #默认数据库，没有@DS的
+        master:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/master?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+          username: root
+          password: root
+        #从数据库，  slave_1，slave_2，slave_3都是对应 @DS("slave") ,可以设置负载均衡策略
+        slave_1:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          #url其实也可以加密，这里就不演示
+          url: jdbc:mysql://localhost:3306/slave_1?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+          #加密，这里做演示，参考 com.example.service.DynamicTest。不加密参考上面的master
+          #参考 https://www.kancloud.cn/tracy5546/dynamic-datasource/2280963
+          username: ENC(Qc7LHbREH+K7Yk/2QAy5RU1X2BXjtj1GUV0mEU7k9YQCEfkWMBolmIBpY4p29WQVL13iDMWB+Zsdo8JS0oFA5A==)
+          password: ENC(Qc7LHbREH+K7Yk/2QAy5RU1X2BXjtj1GUV0mEU7k9YQCEfkWMBolmIBpY4p29WQVL13iDMWB+Zsdo8JS0oFA5A==)
+          #每个数据源可以独立设置，没有就继承上面的。
+          public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKJt4oOGIXhofnDPs90cHkgrsaN+ryxv+eNbJJeKs6FTccoBdXEPNLuwzGS2ScSDkr601wycJWlVO7EIjnVXAUsCAwEAAQ==
+          #表示这个数据源懒启动,可以单独再配置
+          lazy: true
+          #启动初始化执行脚本
+          #schema: db/order/schema.sql # 配置则生效,自动初始化表结构
+          #data: db/order/data.sql # 配置则生效,自动初始化数据
+          #continue-on-error: true # 默认true,初始化失败是否继续
+          druid:
+            #下是独立参数，每个库可以重新设置
+            initial-size: 6
+        slave_2:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/slave_2?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+          username: root
+          password: root
+        slave_3:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/slave_3?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+          username: root
+          password: root
+
+#mybatis-plus配置
+mybatis-plus:
+  global-config:
+    db-config:
+      #全局id策略 雪花id，只有当插入对象ID 为空，才自动填充。
+      id-type: ASSIGN_ID
+      #逻辑未删除 默认0  字段需要在@TableLogic注解
+      logic-not-delete-value: 0
+      #逻辑删除  默认1  字段需要在@TableLogic注解
+      logic-delete-value: 1
+  #包路径扫描
+  type-aliases-package: com.example.entity
+  configuration:
+    #驼峰命名
+    map-underscore-to-camel-case: true
+  #xml文件路径,多个以逗号分割
+  mapper-locations: classpath:mapper/*.xml,classpath*:/mapper/**/*.xml
+
+
