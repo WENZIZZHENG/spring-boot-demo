@@ -19,6 +19,9 @@
         <module>spring-boot-mybatis-plus/spring-boot-mybatis-plus-generate</module>
         <module>spring-boot-mybatis-plus/spring-boot-mybatis-plus-demo</module>
         <module>spring-boot-mybatis-plus/spring-boot-mybatis-plus-dynamic-datasource-demo</module>
+        <module>spring-boot-elasticsearch</module>
+        <module>spring-boot-elasticsearch/spring-boot-elasticsearch-7</module>
+        <module>spring-boot-elasticsearch/spring-boot-elasticsearch-6</module>
     </modules>
 
     <properties>

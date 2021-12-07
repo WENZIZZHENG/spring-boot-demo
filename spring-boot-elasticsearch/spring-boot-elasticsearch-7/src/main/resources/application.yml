@@ -1,0 +1,24 @@
+server:
+  port: 8089
+
+
+spring:
+  data:
+    #es配置
+    elasticsearch:
+      client:
+        reactive:
+          # 要连接到的Elasticsearch端点，多个用逗号分隔
+          endpoints: localhost:9200
+          # 客户机是否应该使用SSL连接到端点。
+          #use-ssl:
+          # 凭证用户名
+          #username:
+          # 凭证密码
+          #password:
+          # 连接超时。
+          #connection-timeout: 10000
+          # 读写套接字超时。
+          #socket-timeout: 10000
+          # 限制在需要聚合输入流时可以缓冲的字节数。
+          #max-in-memory-size:
