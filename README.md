@@ -17,9 +17,9 @@
 
 ```
 spring-boot-demo
-  ├── spring-boot-mybatis-plus                                 #常见问题，注意事项,参考资料，待补充
+  ├── spring-boot-mybatis-plus                                 #常见问题，注意事项,参考资料
   │   ├── spring-boot-mybatis-plus-demo                        #mybatis-plus 企业级应用
-  │	  ├── spring-boot-mybatis-plus-dynamic-datasourc-demo      #mybatis-plus 多数据源，待补充
+  │   ├── spring-boot-mybatis-plus-dynamic-datasourc-demo      #mybatis-plus 多数据源
   │   ├── spring-boot-mybatis-plus-generate                    #mybatis-plus 代码生成器，自定义模板
   │   └── spring-boot-mybatis-plus-simple                      #mybatis-plus 快速入门
   ├── spring-boot-sharding-jdbc                    #常见问题，注意事项,参考资料
@@ -39,7 +39,7 @@ spring-boot-demo
 1.  mybatis-plus 快速入门
 2.  mybatis-plus 代码生成器，自定义模板
 3.  mybatis-plus 多租户，自动分页，乐观锁，防止全表更新与删除，动态表名，sql性能规范，自定义ID生成器，数据填充，枚举等
-4.  mybatis-plus 多数据源，待补充
+4.  mybatis-plus 多数据源
 
 - [spring-boot-sharding-jdbc示例](https://github.com/WENZIZZHENG/spring-boot-demo/tree/master/spring-boot-sharding-jdbc)
 
