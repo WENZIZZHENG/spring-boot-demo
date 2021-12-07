@@ -1,18 +1,18 @@
 package com.example.config;
 
-/**
- * @Description: MP配置文件
- * @Author: wenzizheng
- * @Create: 2020-08-09 19:13
- * @Version: 1.0
- **/
-
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * <p>
+ * MP配置文件
+ * </p>
+ *
+ * @author MrWen
+ */
 @Configuration
 public class MybatisPlusConfig {
 

@@ -11,11 +11,12 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Date;
 
 /**
- * @Description:
- * @Author: wenzizheng
- * @Create: 2020-08-10 10:15
- * @Version: 1.0
- **/
+ * <p>
+ * MP配置文件
+ * </p>
+ *
+ * @author MrWen
+ */
 @Configuration
 public class MybatisPlusConfig implements MetaObjectHandler {
 
