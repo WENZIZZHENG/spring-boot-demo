@@ -17,22 +17,30 @@
 
 ```
 spring-boot-demo
-  ├── spring-boot-mybatis-plus                                 #常见问题，注意事项,参考资料
-  │   ├── spring-boot-mybatis-plus-demo                        #mybatis-plus 企业级应用
-  │   ├── spring-boot-mybatis-plus-dynamic-datasourc-demo      #mybatis-plus 多数据源
-  │   ├── spring-boot-mybatis-plus-generate                    #mybatis-plus 代码生成器，自定义模板
-  │   └── spring-boot-mybatis-plus-simple                      #mybatis-plus 快速入门
+  ├── spring-boot-elasticsearch                   #常见问题，注意事项,参考资料，待补充
+  │   ├── spring-boot-elasticsearch-6             #elasticsearch 6.x版本，待补充
+  │   └── spring-boot-elasticsearch-7             #elasticsearch 7.x版本
+  ├── spring-boot-mybatis-plus                              #常见问题，注意事项,参考资料
+  │   ├── spring-boot-mybatis-plus-demo                     #mybatis-plus 企业级应用
+  │   ├── spring-boot-mybatis-plus-dynamic-datasourc-demo   #mybatis-plus 多数据源
+  │   ├── spring-boot-mybatis-plus-generate                 #mybatis-plus 代码生成器，自定义模板
+  │   └── spring-boot-mybatis-plus-simple                   #mybatis-plus 快速入门
   ├── spring-boot-sharding-jdbc                    #常见问题，注意事项,参考资料
   │   ├── spring-boot-sharding-jdbc-5.0.0
   │   │   ├── sharding-jdbc-5.0.0-simple-db-table  #分库分表快速入门版
   │   │   └── sharding-jdbc-5.0.0-db-table         #分库分表自定义分片规则，自定义自增主键生成器
-  │   ├── spring-boot-sharding-jdbc-4.1.1
-  │   ├── sharding-jdbc-4.1.1-simple-db-table      #分库分表快速入门版
-  │   └── sharding-jdbc-4.1.1-db-table             #分库分表自定义分片规则，自定义自增主键生成器
+  │   └── spring-boot-sharding-jdbc-4.1.1
+  │       ├── sharding-jdbc-4.1.1-simple-db-table  #分库分表快速入门版
+  │       └── sharding-jdbc-4.1.1-db-table         #分库分表自定义分片规则，自定义自增主键生成器
   └── 其它  #正在补充中
 ```
 
-**示例代码**
+**示例代码与概述**
+
+- [spring-boot-elasticsearch](https://github.com/WENZIZZHENG/spring-boot-demo/tree/master/spring-boot-elasticsearch)
+
+1.  elasticsearch 6.x，7.x版本示例
+2.  常见问题，注意事项,参考资料，待补充
 
 - [spring-boot-mybatis-plus示例](https://github.com/WENZIZZHENG/spring-boot-demo/tree/master/spring-boot-mybatis-plus)
 
