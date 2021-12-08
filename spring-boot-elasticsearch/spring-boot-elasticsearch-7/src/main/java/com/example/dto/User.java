@@ -1,31 +1,17 @@
 package com.example.dto;
 
+import lombok.Data;
+
+/**
+ * <p>
+ * 原生操作的测试对象
+ * </p>
+ *
+ * @author MrWen
+ **/
+@Data
 public class User {
     private String name;
     private String sex;
     private Integer age;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
 }

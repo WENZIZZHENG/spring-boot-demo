@@ -175,6 +175,36 @@ public class SpringBootElasticSearch7Test extends BaseTest {
     }
 
 
+    //======================================ORM操作======================================
+    @Test
+    public void testDao() {
+        System.out.println("========================findByCategory========================");
+        List<Product> productList1 = this.productDao.findByCategory("手机");
+        System.out.println("productList1.size() = " + productList1.size());
+        productList1.forEach(System.out::println);
+
+        System.out.println("========================findByCategoryAndPriceGreaterThanEqual========================");
+        List<Product> productList2 = this.productDao.findByCategoryAndPriceGreaterThanEqual("手机", 2006.0);
+        System.out.println("productList2.size() = " + productList2.size());
+        productList2.forEach(System.out::println);
+
+
+        System.out.println("========================findByCategoryAndPriceGreaterThanEqual，自定义分页========================");
+        //设置排序(排序方式，正序还是倒序，排序的id)
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        int currentPage = 0;//当前页，第一页从0开始，1表示第二页
+        int pageSize = 2;//每页显示多少条
+        //设置查询分页
+        PageRequest pageRequest = PageRequest.of(currentPage, pageSize, sort);
+        Page<Product> productPage = this.productDao.findByCategoryAndPriceGreaterThanEqual("手机", 2006.0, pageRequest);
+        System.out.println("总元素 = " + productPage.getTotalElements());
+        System.out.println("总页数 = " + productPage.getTotalPages());
+        productPage.getContent().forEach(System.out::println);
+    }
+
+    //======================================ORM操作======================================
+
+
     //===================================ElasticsearchOperations查询===================================
     /**
      * ElasticsearchOperations查询
@@ -415,11 +445,6 @@ public class SpringBootElasticSearch7Test extends BaseTest {
             // 3.6.获取子聚合结果： get("priceAvg")map对应key的值
             Avg avg = bucket.getAggregations().get("priceAvg");
             System.out.println("平均售价：" + avg.getValueAsString());
-
-
-            // 6.x版本 3.6.获取子聚合结果： asMap()获取map集合，get("priceAvg")map对应key的值
-//            InternalAvg avg = (InternalAvg) bucket.getAggregations().asMap().get("priceAvg");
-//            System.out.println("平均售价：" + avg.getValue());
         });
     }
 
@@ -427,36 +452,4 @@ public class SpringBootElasticSearch7Test extends BaseTest {
     //===================================ElasticsearchOperations查询===================================
 
     //======================================文档操作======================================
-
-
-    //======================================ORM操作======================================
-    @Test
-    public void testDao() {
-        System.out.println("========================findByCategory========================");
-        List<Product> productList1 = this.productDao.findByCategory("手机");
-        System.out.println("productList1.size() = " + productList1.size());
-        productList1.forEach(System.out::println);
-
-        System.out.println("========================findByCategoryAndPriceGreaterThanEqual========================");
-        List<Product> productList2 = this.productDao.findByCategoryAndPriceGreaterThanEqual("手机", 2006.0);
-        System.out.println("productList2.size() = " + productList2.size());
-        productList2.forEach(System.out::println);
-
-
-        System.out.println("========================findByCategoryAndPriceGreaterThanEqual，自定义分页========================");
-        //设置排序(排序方式，正序还是倒序，排序的id)
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        int currentPage = 0;//当前页，第一页从0开始，1表示第二页
-        int pageSize = 2;//每页显示多少条
-        //设置查询分页
-        PageRequest pageRequest = PageRequest.of(currentPage, pageSize, sort);
-        Page<Product> productPage = this.productDao.findByCategoryAndPriceGreaterThanEqual("手机", 2006.0, pageRequest);
-        System.out.println("总元素 = " + productPage.getTotalElements());
-        System.out.println("总页数 = " + productPage.getTotalPages());
-        productPage.getContent().forEach(System.out::println);
-    }
-
-    //======================================ORM操作======================================
-
-
 }

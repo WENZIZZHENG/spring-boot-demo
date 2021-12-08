@@ -13,6 +13,13 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.Date;
 
+/**
+ * <p>
+ * spring data elasticsearch的Entity对象
+ * </p>
+ *
+ * @author MrWen
+ **/
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

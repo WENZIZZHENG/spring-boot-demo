@@ -8,6 +8,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * <p>
+ * spring data elasticsearch的ORM操作
+ * </p>
+ *
+ * @author MrWen
+ **/
 @Repository
 public interface ProductDao extends ElasticsearchRepository<Product, Long> {
 
