@@ -1,0 +1,12 @@
+server:
+  port: 8088
+
+
+spring:
+  data:
+    elasticsearch:
+      # 要连接到的Elasticsearch端点，多个用逗号分隔
+      cluster-nodes: 127.0.0.1:9300
+      # Elasticsearch集群名称
+      cluster-name: elasticsearch
+
