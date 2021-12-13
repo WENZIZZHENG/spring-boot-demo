@@ -22,6 +22,7 @@
         <module>spring-boot-elasticsearch</module>
         <module>spring-boot-elasticsearch/spring-boot-elasticsearch-7</module>
         <module>spring-boot-elasticsearch/spring-boot-elasticsearch-6</module>
+        <module>spring-boot-swagger</module>
     </modules>
 
     <properties>
