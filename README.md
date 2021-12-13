@@ -17,8 +17,8 @@
 
 ```
 spring-boot-demo
-  ├── spring-boot-elasticsearch                   #常见问题，注意事项,参考资料，待补充
-  │   ├── spring-boot-elasticsearch-6             #elasticsearch 6.x版本，待补充
+  ├── spring-boot-elasticsearch                   #注意事项
+  │   ├── spring-boot-elasticsearch-6             #elasticsearch 6.x版本
   │   └── spring-boot-elasticsearch-7             #elasticsearch 7.x版本
   ├── spring-boot-mybatis-plus                              #常见问题，注意事项,参考资料
   │   ├── spring-boot-mybatis-plus-demo                     #mybatis-plus 企业级应用
@@ -40,7 +40,8 @@ spring-boot-demo
 - [spring-boot-elasticsearch](https://github.com/WENZIZZHENG/spring-boot-demo/tree/master/spring-boot-elasticsearch)
 
 1.  elasticsearch 6.x，7.x版本示例
-2.  常见问题，注意事项,参考资料，待补充
+2.  原生elasticsearch操作
+3.  Spring Data ElasticSearch操作示例,ORM操作，聚合操作
 
 - [spring-boot-mybatis-plus示例](https://github.com/WENZIZZHENG/spring-boot-demo/tree/master/spring-boot-mybatis-plus)
 
