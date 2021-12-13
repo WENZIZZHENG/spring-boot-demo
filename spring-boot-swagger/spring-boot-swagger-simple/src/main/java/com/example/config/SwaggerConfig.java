@@ -38,9 +38,9 @@ public class SwaggerConfig {
      */
     private ApiInfo buildApiInf() {
         return new ApiInfoBuilder()
-                .title("mp测试")
+                .title("swagger测试")
                 .version("1.0")
-                .description("mp测试")
+                .description("swagger测试描述")
                 .termsOfServiceUrl("http://www.example.com")
                 .build();
     }

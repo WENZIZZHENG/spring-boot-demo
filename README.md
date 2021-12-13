@@ -32,6 +32,8 @@ spring-boot-demo
   │   └── spring-boot-sharding-jdbc-4.1.1
   │       ├── sharding-jdbc-4.1.1-simple-db-table  #分库分表快速入门版
   │       └── sharding-jdbc-4.1.1-db-table         #分库分表自定义分片规则，自定义自增主键生成器
+  ├── spring-boot-swagger                          #概述
+  │   └── spring-boot-swagger-simple               #swagger快速入门版
   └── 其它  #正在补充中
 ```
 
@@ -56,4 +58,6 @@ spring-boot-demo
 2.  自定义分库分表规则，自定义自增主键
 3.  与mybatis-plus整合，解决更新时触发分片规则报错问题
 4.  spring-boot-starter-jooq整合sharding-jdbc常见问题及解决方案
+
+* [spring-boot-swagger示例](https://github.com/WENZIZZHENG/spring-boot-demo/tree/master/spring-boot-swagger)
 
