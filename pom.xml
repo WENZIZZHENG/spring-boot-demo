@@ -23,6 +23,13 @@
         <module>spring-boot-elasticsearch/spring-boot-elasticsearch-7</module>
         <module>spring-boot-elasticsearch/spring-boot-elasticsearch-6</module>
         <module>spring-boot-swagger</module>
+        <module>spring-boot-mq-rabbitmq</module>
+        <module>spring-boot-mq-rabbitmq/spring-boot-rabbitmq-simple</module>
+        <module>spring-boot-mq-rabbitmq/spring-boot-rabbitmq</module>
+        <module>spring-boot-mq-rabbitmq/spring-boot-rabbitmq-simple/producer-simple</module>
+        <module>spring-boot-mq-rabbitmq/spring-boot-rabbitmq/producer</module>
+        <module>spring-boot-mq-rabbitmq/spring-boot-rabbitmq-simple/consumer-simple</module>
+        <module>spring-boot-mq-rabbitmq/spring-boot-rabbitmq/consumer</module>
     </modules>
 
     <properties>
