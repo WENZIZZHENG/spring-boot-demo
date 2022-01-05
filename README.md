@@ -20,6 +20,12 @@ spring-boot-demo
   ├── spring-boot-elasticsearch                   #注意事项
   │   ├── spring-boot-elasticsearch-6             #elasticsearch 6.x版本
   │   └── spring-boot-elasticsearch-7             #elasticsearch 7.x版本
+  ├── spring-boot-mq-rabbitmq                     #常见问题，注意事项,参考资料，待补充
+  │   ├── spring-boot-rabbitmq                    #rabbitmq 5大工作模式及发送应答ACK，消费手动确认ACK，死信队列等场景
+  │   └── spring-boot-rabbitmq-simple             #rabbitmq 快速入门
+  ├── spring-boot-mq-rocketmq                     #常见问题，注意事项,参考资料，待补充
+  │   ├── spring-boot-rocketmq                    #rocketmq 待补充
+  │   └── spring-boot-rocketmq-simple             #rocketmq 快速入门,待补充
   ├── spring-boot-mybatis-plus                              #常见问题，注意事项,参考资料
   │   ├── spring-boot-mybatis-plus-demo                     #mybatis-plus 企业级应用
   │   ├── spring-boot-mybatis-plus-dynamic-datasourc-demo   #mybatis-plus 多数据源
