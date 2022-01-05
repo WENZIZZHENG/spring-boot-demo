@@ -30,6 +30,13 @@
         <module>spring-boot-mq-rabbitmq/spring-boot-rabbitmq/producer</module>
         <module>spring-boot-mq-rabbitmq/spring-boot-rabbitmq-simple/consumer-simple</module>
         <module>spring-boot-mq-rabbitmq/spring-boot-rabbitmq/consumer</module>
+        <module>spring-boot-mq-rocketmq</module>
+        <module>spring-boot-mq-rocketmq/spring-boot-rocketmq-simple</module>
+        <module>spring-boot-mq-rocketmq/spring-boot-rocketmq</module>
+        <module>spring-boot-mq-rocketmq/spring-boot-rocketmq-simple/rocketmq-producer-simple</module>
+        <module>spring-boot-mq-rocketmq/spring-boot-rocketmq-simple/rocketmq-consumer-simple</module>
+        <module>spring-boot-mq-rocketmq/spring-boot-rocketmq/rocketmq-consumer</module>
+        <module>spring-boot-mq-rocketmq/spring-boot-rocketmq/rocketmq-producer</module>
     </modules>
 
     <properties>
