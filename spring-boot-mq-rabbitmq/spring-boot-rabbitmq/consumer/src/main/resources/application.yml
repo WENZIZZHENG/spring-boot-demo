@@ -1,0 +1,84 @@
+# 配置tomcat端口号
+server:
+  port: 9003
+
+# 配置rabbitmq
+spring:
+  rabbitmq:
+    host: 127.0.0.1          # rabbitMQ的ip地址
+    #addresses: 192.168.150.101:8071, 192.168.150.101:8072, 192.168.150.101:8073  #集群地址
+    port: 5672               # 端口
+    username: guest          # 账号
+    password: guest          #密码
+    virtual-host: /          #虚拟机
+    #publisher-confirms: true # 开启消息发送确认机制,低版本(一般在生产端，消费端加上也没关系)
+    publisher-confirm-type: correlated # 开启消息发送确认机制(一般在生产端，消费端加上也没关系)
+    listener:
+      simple:
+        # 并发消费：每个侦听器线程的最小数量，具体数值根据系统性能配置（一般为系统cpu核数）
+        concurrency: 2
+        # 并发消费：每个侦听器线程的最大数量，具体数值根据系统性能配置（一般为系统cpu核数*2）
+        max-concurrency: 4
+        # 每次只能获取一条消息，处理完成才能获取下一个消息,避免照成消息堆积在一个消费线程上
+        prefetch: 1
+        #acknowledge-mode: manual         # 消费者开启手动ack消息确认，需要测试请看示例请AckConsumer,所有队列都会生效
+        #default-requeue-rejected: false  # 设置为false，会重发消息到死信队列（防止手动ack确认失败的消息堆积），需要测试请示例AckConsumer,所有队列都会生效
+        retry:
+          enabled: true                   # 解决消息死循环问题-启用重试
+          max-attempts: 3                 # 最大重试3次(默认)，超过就丢失（或放到死信队列中，防止消息堆积）
+          multiplier: 2                   # 乘子
+          initial-interval: 3000          # 第一次和第二次之间的重试间隔，后面的用乘子计算 3s 6s 12s
+          max-interval: 16000             # 最大重试时间间隔16s
+
+
+# ==================================其实下面用常量配置更好，统一管理，这里只是作为配置文件的演示==================================
+# 发布与订阅模式
+fanout:
+  # 交换机
+  exchange: fanout-exchange
+  # 队列名称
+  sms:
+    queue: fanout-sms-queue
+  weixin:
+    queue: fanout-weixin-queue
+
+# 路由模式
+direct:
+  # 交换机
+  exchange: direct-exchange
+  # 队列名称
+  info:
+    queue: direct-info-queue
+  error:
+    queue: direct-error-queue
+  all:
+    queue: direct-all-queue
+
+
+# 主题模式
+topic:
+  # 交换机
+  exchange: topic-exchange
+  # 配置队列名称
+  info:
+    queue: topic-info-queue
+  error:
+    queue: topic-error-queue
+  full:
+    queue: topic-full-queue
+
+
+
+# 主题模式下的ack确认+死信队列
+topicAck:
+  # 交换机
+  exchange: topicAck-exchange
+  # 配置队列名称
+  ack:
+    queue: topicAck-ack-queue
+# 死信队列
+dead:
+  # 交换机
+  exchange: dead-exchange
+  # 配置队列名称
+  queue: dead-queue

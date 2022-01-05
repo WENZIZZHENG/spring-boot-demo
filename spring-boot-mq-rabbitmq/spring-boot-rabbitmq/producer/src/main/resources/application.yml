@@ -1,0 +1,15 @@
+# 配置tomcat端口号
+server:
+  port: 9002
+
+# 配置rabbitmq
+spring:
+  rabbitmq:
+    host: 127.0.0.1   #mq地址
+    port: 5672        #端口
+    username: guest   #登录账号
+    password: guest   #登录密码
+    virtual-host: /   #虚拟机
+    #publisher-confirms: true # 开启消息发送确认机制,低版本
+    publisher-confirm-type: correlated # 开启消息发送确认机制
+

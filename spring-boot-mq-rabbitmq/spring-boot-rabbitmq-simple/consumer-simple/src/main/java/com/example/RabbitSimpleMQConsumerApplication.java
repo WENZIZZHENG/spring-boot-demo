@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * </p>
  *
  * @author MrWen
- * @since 2022-01-05 11:36
  */
 @SpringBootApplication
 public class RabbitSimpleMQConsumerApplication {
