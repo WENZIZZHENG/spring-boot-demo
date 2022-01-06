@@ -11,9 +11,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author MrWen
  */
 @SpringBootApplication
-public class RabbitSimpleMQConsumerApplication {
+public class RabbitMQSimpleProducerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(RabbitSimpleMQConsumerApplication.class);
+        SpringApplication.run(RabbitMQSimpleProducerApplication.class);
     }
+
 }
