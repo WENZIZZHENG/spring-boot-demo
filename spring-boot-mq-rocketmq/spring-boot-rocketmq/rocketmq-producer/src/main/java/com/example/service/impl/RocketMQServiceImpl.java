@@ -53,13 +53,13 @@ public class RocketMQServiceImpl implements IRocketMQService {
     @Override
     public void sendAsyncMessage(String key, Object msg, SendCallback sendCallback) {
         this.rocketMqTemplate.asyncSend(key, msg, sendCallback);
-        log.info("MQ发送异步消息成功,key={} msg={}", key, msg);
+        log.info("MQ发送异步消息,key={} msg={}", key, msg);
     }
 
     @Override
     public void sendOneway(String key, Object msg) {
         this.rocketMqTemplate.sendOneWay(key, msg);
-        log.info("MQ发送单向消息成功,key={} msg={}", key, msg);
+        log.info("MQ发送单向消息,key={} msg={}", key, msg);
     }
 
     @Override

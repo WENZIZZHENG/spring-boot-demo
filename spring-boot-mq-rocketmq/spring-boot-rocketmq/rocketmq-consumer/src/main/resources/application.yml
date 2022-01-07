@@ -1,0 +1,10 @@
+server:
+  port: 8097
+spring:
+  application:
+    name: rocketmq-producer
+
+rocketmq:
+  name-server: 192.168.56.126:9876        # rocketMQ的名称服务器，格式为:' host:port;host:port '。
+  producer:
+    group: ${spring.application.name} # 生产着组名
