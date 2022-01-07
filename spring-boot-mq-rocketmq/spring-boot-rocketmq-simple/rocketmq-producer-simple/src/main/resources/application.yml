@@ -5,7 +5,7 @@ spring:
     name: rocketmq-producer-simple
 
 rocketmq:
-  name-server: 127.0.0.1:10911        # rocketMQ的名称服务器，格式为:' host:port;host:port '。
+  name-server: 127.0.0.1:9876         # rocketMQ的名称服务器，格式为:' host:port;host:port '。
   producer:
     group: ${spring.application.name} # 生产着组名
 #    access-key: access-key           # rocketMQ服务端配置授权信息，没有则不需要
