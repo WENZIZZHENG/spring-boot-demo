@@ -17,8 +17,8 @@ import java.util.concurrent.TimeUnit;
  **/
 @Slf4j
 @Component
-@RocketMQMessageListener(topic = "ConsumerBroadcast",//主题
-        consumerGroup = "ConsumerBroadcast_group",//消费组  唯一
+@RocketMQMessageListener(topic = "Consumer_Broadcast",//主题
+        consumerGroup = "Consumer_Broadcast_group",//消费组  唯一
         messageModel = MessageModel.BROADCASTING //消费模式 默认CLUSTERING集群  BROADCASTING:广播（接收所有信息）
 )
 public class ConsumerBroadcast implements RocketMQListener<String> {

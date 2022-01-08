@@ -1,5 +1,5 @@
 server:
-  port: 8097
+  port: 8096
 spring:
   application:
     name: rocketmq-producer

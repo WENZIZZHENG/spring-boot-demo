@@ -3,6 +3,8 @@ package com.example.service;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 
+import java.util.List;
+
 /**
  * <p>
  * RocektMQ生产者常用发送消息方法
@@ -54,15 +56,26 @@ public interface IRocketMQService {
     void sendOneway(String key, Object msg);
 
     /**
-     * 发送批量消息
+     * 发送批量消息(发送超过1MB,做了自动分割,超时时间设置30s（默认3s）)，注：默认最大是4MB，为了避免ListSplitter.calcMessageSize计算不精确及大批量数据发送超时才设置1MB
      *
      * @param key  主题名:标签 topicName:tags
-     * @param list 批量消息（小批量）
+     * @param list 批量消息
      */
-//    void sendBatchMsg(String key, List<Object> list);
+    void sendBatchMessage(String key, List<?> list);
+
 
     /**
-     * 发送延时消息（超时时间，默认30s）
+     * 发送批量消息(发送超过1MB,做了自动分割。)，注：默认最大是4MB，为了避免ListSplitter.calcMessageSize计算不精确及大批量数据发送超时才设置1MB
+     *
+     * @param topicName 主题名 topicName
+     * @param tags      标签 tags
+     * @param timeout   超时时间,空则默认设为30s
+     * @param list      批量消息
+     */
+    void sendBatchMessage(String topicName, String tags, Long timeout, List<?> list);
+
+    /**
+     * 发送延时消息（超时时间，设置30s（默认3s））
      * 1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h
      * 1  2  3   4   5  6  7  8  9  10 11 12 13 14  15  16  17 18
      *
