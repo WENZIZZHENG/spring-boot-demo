@@ -20,6 +20,10 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderPaidEvent implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+
     private String orderId;
 
     private BigDecimal paidMoney;

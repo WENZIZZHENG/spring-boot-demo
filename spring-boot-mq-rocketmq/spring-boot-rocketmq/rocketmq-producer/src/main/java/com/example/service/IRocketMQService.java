@@ -21,7 +21,9 @@ public interface IRocketMQService {
      * 发送同步消息（这种可靠性同步地发送方式使用的比较广泛，比如：重要的消息通知，短信通知。）
      * <p>
      * （send消息方法只要不抛异常，就代表发送成功。但不保证100%可靠投递(所有消息都一样，后面不在叙述)。
-     * 要确保不会丢失任何消息，还应启用同步Master服务器或同步刷盘，即SYNC_MASTER或SYNC_FLUSH。）
+     * 要确保不会丢失任何消息，还应启用同步Master服务器或同步刷盘，即SYNC_MASTER或SYNC_FLUSH。
+     * 解析看：https://github.com/apache/rocketmq/blob/master/docs/cn/best_practice.md
+     * ）
      *
      * @param destination 主题名:标签 topicName:tags
      * @param msg         发送对象
@@ -149,4 +151,13 @@ public interface IRocketMQService {
      */
     SendResult sendInOrder(String destination, Object msg, String hashKey);
 
+
+    /**
+     * 发送事务消息（一定要做幂等性处理（其实所有消息都要做幂等性。。））
+     *
+     * @param destination 主题名:标签 topicName:tags
+     * @param msg         发送对象
+     * @return 发送结果，只有为SEND_OK且同步Master服务器或同步刷盘才保证100%投递成功
+     */
+    SendResult sendMessageInTransaction(String destination, Object msg, Object arg);
 }

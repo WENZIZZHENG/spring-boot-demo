@@ -5,10 +5,7 @@ import com.example.service.IRocketMQService;
 import com.example.service.util.ListSplitter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.client.producer.SendCallback;
-import org.apache.rocketmq.client.producer.SendResult;
-import org.apache.rocketmq.client.producer.SendStatus;
+import org.apache.rocketmq.client.producer.*;
 import org.apache.rocketmq.common.message.MessageConst;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -190,5 +187,20 @@ public class RocketMQServiceImpl implements IRocketMQService {
         return sendResult;
     }
 
+    @Override
+    public SendResult sendMessageInTransaction(String destination, Object msg, Object arg) {
+        Message<?> message = MessageBuilder
+                //转为JSON格式
+                .withPayload(msg instanceof String ? msg : JSON.toJSONString(msg))
+                .build();
 
+        TransactionSendResult sendResult = rocketMqTemplate.sendMessageInTransaction(destination, message, arg);
+
+        if (SendStatus.SEND_OK.equals(sendResult.getSendStatus())) {
+            log.info("MQ发送事务消息成功,destination={} msg={} sendResult={}", destination, message, sendResult);
+        } else {
+            log.warn("MQ发送事务消息不一定成功,destination={} msg={} sendResult={}", destination, message, sendResult);
+        }
+        return sendResult;
+    }
 }

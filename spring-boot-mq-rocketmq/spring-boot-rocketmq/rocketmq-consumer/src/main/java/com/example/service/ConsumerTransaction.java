@@ -1,9 +1,9 @@
 package com.example.service;
 
+import com.example.dto.OrderPaidEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
-import org.apache.rocketmq.spring.annotation.MessageModel;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.apache.rocketmq.spring.core.RocketMQPushConsumerLifecycleListener;
@@ -13,30 +13,29 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
- * 集群模式消费,负载均衡模式消费（最常用！！！）
+ * 事务消息演示
  * </p>
  *
  * @author MrWen
  **/
 @Slf4j
 @Component
-@RocketMQMessageListener(topic = "Consumer_Cluster",//主题
-        consumerGroup = "Consumer_Cluster_group",//消费组  唯一
-        messageModel = MessageModel.CLUSTERING //消费模式 默认CLUSTERING集群  BROADCASTING:广播（接收所有信息）
+@RocketMQMessageListener(topic = "Consumer_Transaction",//主题
+        consumerGroup = "Consumer_Transaction_group"//消费组  唯一
 )
-public class ConsumerCluster implements RocketMQListener<String>, RocketMQPushConsumerLifecycleListener {
+public class ConsumerTransaction implements RocketMQListener<OrderPaidEvent>, RocketMQPushConsumerLifecycleListener {
 
     /**
      * 消费者
      * 程序报错则进行重试
      *
-     * @param message 接收的消息
+     * @param orderPaidEvent 接收的消息,订单支付事件
      */
     @Override
-    public void onMessage(String message) {
+    public void onMessage(OrderPaidEvent orderPaidEvent) {
         try {
             //模拟业务逻辑处理中...
-            log.info("ConsumerCluster 集群模式消费 message: {}  ", message);
+            log.info("ConsumerTransaction 事务消息消费 message: {}  ", orderPaidEvent);
             TimeUnit.SECONDS.sleep(10);
             //模拟出错，触发重试
 //            int i = 1 / 0;

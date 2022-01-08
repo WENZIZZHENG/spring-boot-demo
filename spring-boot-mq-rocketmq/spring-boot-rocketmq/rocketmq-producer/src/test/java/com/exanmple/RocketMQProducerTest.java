@@ -2,6 +2,7 @@ package com.exanmple;
 
 import com.example.RocketMQProducerApplication;
 import com.example.dto.BatchDto;
+import com.example.dto.OrderPaidEvent;
 import com.example.dto.OrderStep;
 import com.example.service.IRocketMQService;
 import lombok.SneakyThrows;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -183,6 +185,23 @@ public class RocketMQProducerTest {
             this.rocketMQService.sendInOrder("Consumer_InOrder", orderStep, orderStep.getOrderId() + "");
         }
 //        }
+    }
+
+    /**
+     * 发送事务消息（一定要做幂等性处理（其实所有消息都要做幂等性。。））
+     */
+    @Test
+    @SneakyThrows
+    public void sendMessageInTransaction() {
+        OrderPaidEvent build = OrderPaidEvent.builder()
+                .orderId("123")
+                .msg("事务消息-开始支付")
+                .paidMoney(new BigDecimal(2))
+                .build();
+        this.rocketMQService.sendMessageInTransaction("Consumer_Transaction", build, "test");
+
+        //先睡200秒，避免还没发送完毕就关闭了
+        TimeUnit.SECONDS.sleep(200L);
     }
 
 
