@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -69,6 +70,34 @@ public class RocketMQServiceImpl implements IRocketMQService {
             log.info("MQ发送同步消息成功,topicName={},tags={},msg={},sendResult={}", topicName, tags, msg, sendResult);
         } else {
             log.warn("MQ发送同步消息不一定成功,topicName={},tags={},msg={},sendResult={}", topicName, tags, msg, sendResult);
+        }
+        return sendResult;
+    }
+
+    @Override
+    public SendResult sendMessageBySql(String topicName, Map<String, Object> map, Object msg) {
+        return this.sendMessageBySql(topicName, map, null, msg);
+    }
+
+    @Override
+    public SendResult sendMessageBySql(String topicName, Map<String, Object> map, String key, Object msg) {
+        MessageBuilder<?> messageBuilder = MessageBuilder.withPayload(msg);
+        //设置key,唯一标识码要设置到keys字段，方便将来定位消息丢失问题
+        if (StringUtils.isNotBlank(key)) {
+            messageBuilder.setHeader(MessageConst.PROPERTY_KEYS, key);
+        }
+        //设置自定义属性
+        if (map != null && !map.isEmpty()) {
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                messageBuilder.setHeader(entry.getKey(), entry.getValue());
+            }
+        }
+        Message<?> message = messageBuilder.build();
+        SendResult sendResult = this.rocketMqTemplate.syncSend(topicName, message);
+        if (SendStatus.SEND_OK.equals(sendResult.getSendStatus())) {
+            log.info("发送同步消息-SQL92模式成功,topicName={},map={},msg={},sendResult={}", topicName, map, msg, sendResult);
+        } else {
+            log.warn("发送同步消息-SQL92模式不一定成功,topicName={},map={},msg={},sendResult={}", topicName, map, msg, sendResult);
         }
         return sendResult;
     }

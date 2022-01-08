@@ -15,7 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -54,6 +56,20 @@ public class RocketMQProducerTest {
     public void sendMessageByTag() {
         rocketMQService.sendMessage("Consumer_Tag", "tag1", "过滤同步消息tag1");
         rocketMQService.sendMessage("Consumer_Tag", "tag2", "过滤同步消息tag2");
+        rocketMQService.sendMessage("Consumer_Tag", "tag3", "过滤同步消息tag3");
+    }
+
+    /**
+     * 发送同步消息-发送同步消息-SQL92模式
+     */
+    @Test
+    public void sendMessageBySql() {
+        Map<String, Object> map = new HashMap<>();
+        for (int i = 0; i < 10; i++) {
+            map.put("a", i);
+            map.put("b", i % 2 == 0 ? "sql" : "notSql");
+            rocketMQService.sendMessageBySql("Consumer_SQL", map, "SQL92模式消息  map=" + map);
+        }
     }
 
 

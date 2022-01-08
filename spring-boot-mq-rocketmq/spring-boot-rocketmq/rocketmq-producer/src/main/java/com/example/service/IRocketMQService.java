@@ -4,6 +4,7 @@ import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -48,6 +49,33 @@ public interface IRocketMQService {
      * @return 发送结果，只有为SEND_OK且同步Master服务器或同步刷盘才保证100%投递成功
      */
     SendResult sendMessage(String topicName, String tags, String key, Object msg);
+
+    /**
+     * 发送同步消息-SQL92模式
+     * 需要配置RocketMQ服务器  vim conf/broker.conf  ##支持sql语句过滤  enablePropertyFilter=true
+     * 在console控制台查看集群状态  enablePropertyFilter=true 才正常
+     *
+     * @param topicName 主题名 topicName
+     * @param map       自定义属性
+     * @param msg       发送对象
+     * @return 发送结果，只有为SEND_OK且同步Master服务器或同步刷盘才保证100%投递成功
+     */
+    SendResult sendMessageBySql(String topicName, Map<String, Object> map, Object msg);
+
+
+    /**
+     * 发送同步消息-SQL92模式
+     * 需要配置RocketMQ服务器  vim conf/broker.conf  ##支持sql语句过滤  enablePropertyFilter=true
+     * 在console控制台查看集群状态  enablePropertyFilter=true 才正常
+     *
+     * @param topicName 主题名 topicName
+     * @param map       自定义属性
+     * @param key       唯一标识码要设置到keys字段，方便将来定位消息丢失问题
+     * @param msg       发送对象
+     * @return 发送结果，只有为SEND_OK且同步Master服务器或同步刷盘才保证100%投递成功
+     */
+    SendResult sendMessageBySql(String topicName, Map<String, Object> map, String key, Object msg);
+
 
     /**
      * 发生异步消息（异步消息通常用在对响应时间敏感的业务场景，即发送端不能容忍长时间地等待Broker的响应。）
