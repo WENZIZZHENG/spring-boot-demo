@@ -48,6 +48,16 @@ public class RocketMQProducerTest {
     }
 
     /**
+     * 发送同步消息-Tag过滤模式
+     */
+    @Test
+    public void sendMessageByTag() {
+        rocketMQService.sendMessage("Consumer_Tag", "tag1", "过滤同步消息tag1");
+        rocketMQService.sendMessage("Consumer_Tag", "tag2", "过滤同步消息tag2");
+    }
+
+
+    /**
      * 发送异步消息
      */
     @SneakyThrows
