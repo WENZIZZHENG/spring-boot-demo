@@ -5,6 +5,13 @@ spring:
     name: rocketmq-producer
 
 rocketmq:
-  name-server: 192.168.56.126:9876        # rocketMQ的名称服务器，格式为:' host:port;host:port '。
+  name-server: 127.0.0.1:9876          # rocketMQ的名称服务器，格式为:' host:port;host:port '。
+  # 生产端配置
   producer:
-    group: ${spring.application.name} # 生产着组名
+    group: ${spring.application.name}  # 生产着组名
+    #access-key: access-key            # rocketMQ服务端配置acl授权信息，没有则不需要
+    #secret-key: secret-key            # rocketMQ服务端配置acl授权信息，没有则不需要
+  # 消费端配置
+#  consumer:
+#    access-key: access-key            #如果开启了acl，一定要配置。否则集群模式下会正常，广播模式消费端会失效！
+#    secret-key: secret-key            #如果开启了acl，一定要配置。否则集群模式下会正常，广播模式消费端会失效！
