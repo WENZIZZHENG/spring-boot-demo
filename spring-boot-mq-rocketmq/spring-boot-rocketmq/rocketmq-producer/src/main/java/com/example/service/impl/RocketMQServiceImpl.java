@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.example.service.IRocketMQService;
 import com.example.service.util.ListSplitter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
@@ -42,19 +43,28 @@ public class RocketMQServiceImpl implements IRocketMQService {
     private DefaultMQProducer producer;
 
     @Override
-    public SendResult sendMessage(String key, Object msg) {
-        SendResult sendResult = this.rocketMqTemplate.syncSend(key, msg);
-        if (SendStatus.SEND_OK.equals(sendResult.getSendStatus())) {
-            log.info("MQ发送同步消息成功,key={} msg={},sendResult={}", key, msg, sendResult);
-        } else {
-            log.warn("MQ发送同步消息不一定成功,key={} msg={},sendResult={}", key, msg, sendResult);
+    public SendResult sendMessage(String destination, Object msg) {
+        String[] split = destination.split(":");
+        if (split.length == 2) {
+            return this.sendMessage(split[0], split[1], msg);
         }
-        return sendResult;
+        return this.sendMessage(destination, null, msg);
     }
 
     @Override
     public SendResult sendMessage(String topicName, String tags, Object msg) {
-        SendResult sendResult = this.rocketMqTemplate.syncSend(topicName + ":" + tags, msg);
+        return this.sendMessage(topicName, tags, null, msg);
+    }
+
+    @Override
+    public SendResult sendMessage(String topicName, String tags, String key, Object msg) {
+        MessageBuilder<?> messageBuilder = MessageBuilder.withPayload(msg);
+        //设置key,唯一标识码要设置到keys字段，方便将来定位消息丢失问题
+        if (StringUtils.isNotBlank(key)) {
+            messageBuilder.setHeader(MessageConst.PROPERTY_KEYS, key);
+        }
+        Message<?> message = messageBuilder.build();
+        SendResult sendResult = this.rocketMqTemplate.syncSend(StringUtils.isBlank(tags) ? topicName : (topicName + ":" + tags), message);
         if (SendStatus.SEND_OK.equals(sendResult.getSendStatus())) {
             log.info("MQ发送同步消息成功,topicName={},tags={},msg={},sendResult={}", topicName, tags, msg, sendResult);
         } else {
@@ -64,23 +74,23 @@ public class RocketMQServiceImpl implements IRocketMQService {
     }
 
     @Override
-    public void sendAsyncMessage(String key, Object msg, SendCallback sendCallback) {
-        this.rocketMqTemplate.asyncSend(key, msg, sendCallback);
-        log.info("MQ发送异步消息,key={} msg={}", key, msg);
+    public void sendAsyncMessage(String destination, Object msg, SendCallback sendCallback) {
+        this.rocketMqTemplate.asyncSend(destination, msg, sendCallback);
+        log.info("MQ发送异步消息,destination={} msg={}", destination, msg);
     }
 
     @Override
-    public void sendOneway(String key, Object msg) {
-        this.rocketMqTemplate.sendOneWay(key, msg);
-        log.info("MQ发送单向消息,key={} msg={}", key, msg);
+    public void sendOneway(String destination, Object msg) {
+        this.rocketMqTemplate.sendOneWay(destination, msg);
+        log.info("MQ发送单向消息,destination={} msg={}", destination, msg);
     }
 
     @Override
-    public void sendBatchMessage(String key, List<?> list) {
-        String topicName = key;
+    public void sendBatchMessage(String destination, List<?> list) {
+        String topicName = destination;
         String tags = "";
 
-        String[] split = key.split(":");
+        String[] split = destination.split(":");
         if (split.length == 2) {
             topicName = split[0];
             tags = split[1];
@@ -118,50 +128,35 @@ public class RocketMQServiceImpl implements IRocketMQService {
     }
 
     @Override
-    public SendResult sendDelayLevel(String key, Object msg, int delayTimeLevel) {
+    public SendResult sendDelayLevel(String destination, Object msg, int delayTimeLevel) {
+        return this.sendDelayLevel(destination, msg, 30000, delayTimeLevel);
+    }
+
+    @Override
+    public SendResult sendDelayLevel(String destination, Object msg, int timeout, int delayTimeLevel) {
         Message<?> message = MessageBuilder
                 .withPayload(msg)
-                //设置key
-                .setHeader(MessageConst.PROPERTY_KEYS, key)
                 .build();
-        SendResult sendResult = this.rocketMqTemplate.syncSend(key, message, 30000, delayTimeLevel);
+        SendResult sendResult = this.rocketMqTemplate.syncSend(destination, message, timeout, delayTimeLevel);
         if (SendStatus.SEND_OK.equals(sendResult.getSendStatus())) {
-            log.info("MQ发送延时消息成功,key={} msg={} sendResult={}", key, message, sendResult);
+            log.info("MQ发送延时消息成功,destination={} msg={} sendResult={}", destination, message, sendResult);
         } else {
-            log.warn("MQ发送延时消息不一定成功,key={} msg={} sendResult={}", key, message, sendResult);
+            log.warn("MQ发送延时消息不一定成功,destination={} msg={} sendResult={}", destination, message, sendResult);
         }
         return sendResult;
     }
 
     @Override
-    public SendResult sendDelayLevel(String key, Object msg, int timeout, int delayTimeLevel) {
+    public SendResult sendInOrder(String destination, Object msg, String hashKey) {
         Message<?> message = MessageBuilder
                 .withPayload(msg)
-                //设置key
-                .setHeader(MessageConst.PROPERTY_KEYS, key)
-                .build();
-        SendResult sendResult = this.rocketMqTemplate.syncSend(key, message, timeout, delayTimeLevel);
-        if (SendStatus.SEND_OK.equals(sendResult.getSendStatus())) {
-            log.info("MQ发送延时消息成功,key={} msg={} sendResult={}", key, message, sendResult);
-        } else {
-            log.warn("MQ发送延时消息不一定成功,key={} msg={} sendResult={}", key, message, sendResult);
-        }
-        return sendResult;
-    }
-
-    @Override
-    public SendResult sendInOrder(String key, Object msg, String hashKey) {
-        Message<?> message = MessageBuilder
-                .withPayload(msg)
-                //设置key
-                .setHeader(MessageConst.PROPERTY_KEYS, key)
                 .build();
         //hashKey:  根据其哈希值取模后确定发送到哪一个队列
-        SendResult sendResult = this.rocketMqTemplate.syncSendOrderly(key, message, hashKey);
+        SendResult sendResult = this.rocketMqTemplate.syncSendOrderly(destination, message, hashKey);
         if (SendStatus.SEND_OK.equals(sendResult.getSendStatus())) {
-            log.info("MQ发送顺序消息成功,key={} msg={} sendResult={}", key, message, sendResult);
+            log.info("MQ发送顺序消息成功,destination={} msg={} sendResult={}", destination, message, sendResult);
         } else {
-            log.warn("MQ发送顺序消息不一定成功,key={} msg={} sendResult={}", key, message, sendResult);
+            log.warn("MQ发送顺序消息不一定成功,destination={} msg={} sendResult={}", destination, message, sendResult);
         }
         return sendResult;
     }

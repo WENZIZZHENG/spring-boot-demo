@@ -2,6 +2,7 @@ package com.exanmple;
 
 import com.example.RocketMQProducerApplication;
 import com.example.dto.BatchDto;
+import com.example.dto.OrderStep;
 import com.example.service.IRocketMQService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,7 @@ public class RocketMQProducerTest {
             rocketMQService.sendMessage("Consumer_Broadcast", "广播同步消息" + i);
             //集群消费端下的同步消息
             rocketMQService.sendMessage("Consumer_Cluster", "集群同步消息" + i);
+//            rocketMQService.sendMessage("Consumer_Cluster", null, i + "", "集群同步消息" + i);
         }
     }
 
@@ -130,6 +132,91 @@ public class RocketMQProducerTest {
         log.info("=================发送Consumer_Batch主题完毕=================");
 
         Thread.sleep(200000);
+    }
+
+
+    /**
+     * 发送延时消息
+     */
+    @Test
+    public void sendDelayLevel() {
+        this.rocketMQService.sendDelayLevel("Consumer_Cluster", "集群延时消息", 4);
+    }
+
+    /**
+     * 发送顺序消息-分区有序
+     */
+    @Test
+    public void sendInOrder() {
+        // 订单列表
+        List<OrderStep> orderList = this.buildOrders();
+
+        //循环一下，增加测试样本
+//        for (int i = 0; i < 10; i++) {
+        for (OrderStep orderStep : orderList) {
+            this.rocketMQService.sendInOrder("Consumer_InOrder", orderStep, orderStep.getOrderId() + "");
+        }
+//        }
+    }
+
+
+    /**
+     * 生成模拟订单数据
+     */
+    private List<OrderStep> buildOrders() {
+        List<OrderStep> orderList = new ArrayList<>();
+
+        OrderStep orderDemo = new OrderStep();
+        orderDemo.setOrderId(15103111039L);
+        orderDemo.setDesc("创建");
+        orderList.add(orderDemo);
+
+        orderDemo = new OrderStep();
+        orderDemo.setOrderId(15103111065L);
+        orderDemo.setDesc("创建");
+        orderList.add(orderDemo);
+
+        orderDemo = new OrderStep();
+        orderDemo.setOrderId(15103111039L);
+        orderDemo.setDesc("付款");
+        orderList.add(orderDemo);
+
+        orderDemo = new OrderStep();
+        orderDemo.setOrderId(15103117235L);
+        orderDemo.setDesc("创建");
+        orderList.add(orderDemo);
+
+        orderDemo = new OrderStep();
+        orderDemo.setOrderId(15103111065L);
+        orderDemo.setDesc("付款");
+        orderList.add(orderDemo);
+
+        orderDemo = new OrderStep();
+        orderDemo.setOrderId(15103117235L);
+        orderDemo.setDesc("付款");
+        orderList.add(orderDemo);
+
+        orderDemo = new OrderStep();
+        orderDemo.setOrderId(15103111065L);
+        orderDemo.setDesc("完成");
+        orderList.add(orderDemo);
+
+        orderDemo = new OrderStep();
+        orderDemo.setOrderId(15103111039L);
+        orderDemo.setDesc("推送");
+        orderList.add(orderDemo);
+
+        orderDemo = new OrderStep();
+        orderDemo.setOrderId(15103117235L);
+        orderDemo.setDesc("完成");
+        orderList.add(orderDemo);
+
+        orderDemo = new OrderStep();
+        orderDemo.setOrderId(15103111039L);
+        orderDemo.setDesc("完成");
+        orderList.add(orderDemo);
+
+        return orderList;
     }
 
 }
