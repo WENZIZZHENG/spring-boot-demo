@@ -1,12 +1,6 @@
 # RabbitMQ
 
-
-
-
-
-
-
-## 2 如何保障消息可靠生产(消息100%投递成功)
+## 1 如何保障消息可靠生产(消息100%投递成功)
 
 **方案：消息落库，对消息状态进行打标**
 
@@ -20,4 +14,36 @@
 [application.yaml](spring-boot-rabbitmq/producer/src/main/resources/application.yml)
 
 [定义生产者确认回调对象](spring-boot-rabbitmq/producer/src/main/java/com/example/config/ProducerAckConfirmCallback.java)
+
+
+
+
+
+## 2 消息可靠消费
+
+**步骤：**
+
+1. 消费者开始手动ack消息确定
+2. 尝试消息重投
+3. 对重投还是消费失败的消息拒绝确认
+4. 把拒绝确认的消息扔到死信队列中，并记录到数据库，再做好消息预警
+
+**示例**
+
+[application.yaml](spring-boot-rabbitmq/consumer/src/main/resources/application.yml)
+
+需要开启下面的配置
+
+```properties
+spring.rabbitmq.listener.acknowledge-mode=manual  		 #消费者开启手动ack消息确认
+spring.rabbitmq.listener.default-requeue-rejected=false  #设置为false，会重发消息到死信队列
+```
+
+**Consumer示例**
+
+消费端手动确认[AckConsumer](spring-boot-rabbitmq/consumer/src/main/java/com/example/ack/AckConsumer.java)
+
+死信队列[DeadLetterConsumer](spring-boot-rabbitmq/consumer/src/main/java/com/example/ack/DeadLetterConsumer.java)
+
+
 
