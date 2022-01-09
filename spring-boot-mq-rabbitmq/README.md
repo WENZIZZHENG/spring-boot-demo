@@ -47,3 +47,8 @@ spring.rabbitmq.listener.default-requeue-rejected=false  #设置为false，会�
 
 
 
+
+
+## 3：待补充
+
+1. 延时消息

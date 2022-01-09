@@ -53,6 +53,20 @@ spring-boot-demo
 2.  原生elasticsearch操作
 3.  Spring Data ElasticSearch操作示例,ORM操作，聚合操作
 
+- [spring-boot-logback](spring-boot-logback/README.md)
+
+1. 日志框架
+
+- [spring-boot-mq-rabbitmq](spring-boot-mq-rabbitmq/README.md)
+
+1. RabbitMQ消息可靠投递，可靠消费
+2. 工作、发布订阅、路由、主题模式示例
+
+- [spring-boot-mq-rocketmq](spring-boot-mq-rocketmq/README.md)
+
+1. 生产者：同步、异步、单向、批量、延时、顺序、过滤、事务消息示例发送
+2. 消费者：集群、广播模式示例，顺序、过滤消息示例
+
 - [spring-boot-mybatis-plus示例](spring-boot-mybatis-plus/README.md)
 
 1.  mybatis-plus 快速入门
@@ -69,3 +83,8 @@ spring-boot-demo
 
 * [spring-boot-swagger示例](spring-boot-swagger/README.md)
 
+1. swagger文档示例
+
+* [spring-boot-validator](spring-boot-validator/README.md)
+
+1. validator参数校验示例
