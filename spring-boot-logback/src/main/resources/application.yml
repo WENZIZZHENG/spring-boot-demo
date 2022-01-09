@@ -1,0 +1,18 @@
+server:
+  port: 7878
+
+spring:
+  application:
+    # 服务名称
+    name: logback-service
+  profiles:
+    # 环境标识
+    active: dev
+
+
+#日志配置,debug级别
+logging:
+  level:
+    root: info
+    # 路径
+    com.example: debug

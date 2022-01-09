@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--    配置环境变量，这里通过springProperty标签直接读取application.yml中数据库的配置 -->
+    <springProperty scope="context" name="spring.application.name" source="spring.application.name"
+                    defaultValue="logback-application"/>
+    <springProperty scope="context" name="spring.profiles.active" source="spring.profiles.active" defaultValue="local"/>
+    <!--  当前父级目录-->
+    <springProperty scope="context" name="user.dir" source="user.dir" defaultValue="."/>
+    <!--  路径-->
+    <springProfile name="dev">
+        <property name="LOG_PATH" value="${user.dir}/logs/${spring.application.name}"/>
+    </springProfile>
+    <springProfile name="test,prod">
+        <property name="LOG_PATH" value="/log/mall/${spring.application.name}"/>
+    </springProfile>
+
+
+    <!-- 彩色日志 -->
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule
+            conversionWord="clr"
+            converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule
+            conversionWord="wex"
+            converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+    <!-- 彩色日志格式 -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+
+
+    <!-- 1.输出到控制台-->
+    <appender name="LOG_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
+            <!-- 设置字符集 -->
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 2 输出到文件-->
+    <!-- 2.1 info级别 -->
+    <appender name="LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 正在记录的日志文件的路径及文件名 -->
+        <file>${LOG_PATH}/info.log</file>
+        <!--日志文件输出格式-->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 每天日志归档路径以及格式 -->
+            <fileNamePattern>${LOG_PATH}/info/info-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <!--只保留最近30天的日志-->
+            <maxHistory>30</maxHistory>
+            <!--用来指定日志文件的上限大小，那么到了这个值，就会删除旧的日志-->
+            <totalSizeCap>20GB</totalSizeCap>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- maxFileSize:这是活动文件的大小，默认值是10MB-->
+                <maxFileSize>128MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+
+    <!-- 2.2 WARN级别,这里只要warn级别，不需要error -->
+    <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--如果只是想要 WARN 级别的日志，那么需要过滤一下，默认是 info 级别的，ThresholdFilter-->
+        <!--        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                    <level>Warn</level>
+                </filter>-->
+        <!--如果只是想要  WARN 级别的日志，只是过滤 WARN 还是会输出 Error 日志，因为 Error 的级别高， 所以我们使用下面的策略，可以避免输出 Error 的日志-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!--过滤 Error-->
+            <level>Warn</level>
+            <!--匹配到就禁止 DENY  接受 ACCEPT   -->
+            <onMatch>ACCEPT</onMatch>
+            <!--没有匹配到就允许-->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <!-- 正在记录的日志文件的路径及文件名 -->
+        <file>${LOG_PATH}/warm.log</file>
+        <!--日志文件输出格式-->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 每天日志归档路径以及格式 -->
+            <fileNamePattern>${LOG_PATH}/warm/warm-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <!--只保留最近30天的日志-->
+            <maxHistory>30</maxHistory>
+            <!--用来指定日志文件的上限大小，那么到了这个值，就会删除旧的日志-->
+            <totalSizeCap>20GB</totalSizeCap>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- maxFileSize:这是活动文件的大小，默认值是10MB-->
+                <maxFileSize>128MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+
+    <!-- 2.3 error级别 -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--如果只是想要 Error 级别的日志，那么需要过滤一下，默认是 info 级别的，ThresholdFilter-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>Error</level>
+        </filter>
+        <!-- 正在记录的日志文件的路径及文件名 -->
+        <file>${LOG_PATH}/error.log</file>
+        <!--日志文件输出格式-->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 每天日志归档路径以及格式 -->
+            <fileNamePattern>${LOG_PATH}/error/error-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <!--只保留最近30天的日志-->
+            <maxHistory>30</maxHistory>
+            <!--用来指定日志文件的上限大小，那么到了这个值，就会删除旧的日志-->
+            <totalSizeCap>20GB</totalSizeCap>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- maxFileSize:这是活动文件的大小，默认值是10MB-->
+                <maxFileSize>128MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+
+    <springProfile name="dev">
+        <!--  只要控制台-->
+        <root level="info">
+            <appender-ref ref="LOG_CONSOLE"/>
+            <!--  如果只要控制台，把下面三个屏蔽了。  dev建议这样做-->
+            <appender-ref ref="LOG_FILE"/>
+            <appender-ref ref="WARN_FILE"/>
+            <appender-ref ref="ERROR_FILE"/>
+        </root>
+
+        <!--  如果需要排除，或指定某个东西时，排除RocketmqClient 一直bbb-->
+        <logger name="RocketmqClient" additivity="false" level="WARN">
+            <!-- 输出到控制台 -->
+            <appender-ref ref="LOG_CONSOLE"/>
+        </logger>
+    </springProfile>
+
+    <springProfile name="test,prod">
+        <root level="info">
+            <!--  test,prod建议屏蔽console控制台 -->
+            <!-- <appender-ref ref="LOG_CONSOLE"/>-->
+            <appender-ref ref="LOG_FILE"/>
+            <appender-ref ref="WARN_FILE"/>
+            <appender-ref ref="ERROR_FILE"/>
+        </root>
+
+        <!--  如果需要排除，或指定某个东西时，排除RocketmqClient 一直bbb-->
+        <logger name="RocketmqClient" additivity="false" level="WARN">
+            <!-- 输出到控制台 -->
+            <appender-ref ref="LOG_CONSOLE"/>
+        </logger>
+    </springProfile>
+</configuration>

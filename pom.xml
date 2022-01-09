@@ -37,6 +37,7 @@
         <module>spring-boot-mq-rocketmq/spring-boot-rocketmq-simple/rocketmq-consumer-simple</module>
         <module>spring-boot-mq-rocketmq/spring-boot-rocketmq/rocketmq-consumer</module>
         <module>spring-boot-mq-rocketmq/spring-boot-rocketmq/rocketmq-producer</module>
+        <module>spring-boot-logback</module>
     </modules>
 
     <properties>
