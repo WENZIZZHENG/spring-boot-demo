@@ -4,7 +4,7 @@
 
 ### 1.1 版本选择
 
-[参考地址](https://docs.spring.io/spring-data/elasticsearch/docs/current/reference/html/#preface.versions)
+参考地址：https://docs.spring.io/spring-data/elasticsearch/docs/current/reference/html/#preface.versions
 
 |                  Spring Data Release Train                   |                  Spring Data Elasticsearch                   | Elasticsearch |                       Spring Framework                       |                         Spring Boot                          |
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :-----------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
@@ -31,11 +31,11 @@
 
 ### 1.2 中文分词
 
-[elasticsearch-analysis-ik](https://github.com/medcl/elasticsearch-analysis-ik)
+elasticsearch-analysis-ik：https://github.com/medcl/elasticsearch-analysis-ik
 
 
 
 ### 1.3 Mysql数据同步
 
-[alibaba](https://github.com/alibaba)/**[canal](https://github.com/alibaba/canal)**
+[alibaba](https://github.com/alibaba)/canal：https://github.com/alibaba/canal
 

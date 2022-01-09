@@ -14,12 +14,12 @@
 
 
 
-详情参考： [官网](https://shardingsphere.apache.org/index_zh.html)
+详情参考： [官网]：https://shardingsphere.apache.org/index_zh.html
 
 ## 2 注意事项
 
 1.  版本问题：Sharding-JDBC不同版本之间配置文件差异很大，请确定好自身需要的版本
-2.  常见的问题，[详情参考官网FAQ](https://shardingsphere.apache.org/document/5.0.0/cn/reference/faq/)
+2.  常见的问题，[详情参考官网FAQ]：https://shardingsphere.apache.org/document/5.0.0/cn/reference/faq/
 
 
 
@@ -38,7 +38,7 @@
 2:使用mybatis-plus的雪花算法 可以设为IdType.ASSIGN_ID,只有当插入对象ID 为空，才自动填充，在某些场景下可以自定义id。
 ```
 
-**[雪花算法ID到前端之后精度丢失问题，全局解决方案](https://github.com/WENZIZZHENG/spring-boot-demo/blob/master/spring-boot-sharding-jdbc/spring-boot-sharding-jdbc-5.0.0/sharding-jdbc-5.0.0-db-table/src/main/java/com/example/config/JacksonConfig.java)**
+**[雪花算法ID到前端之后精度丢失问题，全局解决方案](spring-boot-sharding-jdbc-5.0.0/sharding-jdbc-5.0.0-db-table/src/main/java/com/example/config/JacksonConfig.java)**
 
 #### **3.1.2 redis自增主键**
 
@@ -51,16 +51,16 @@ Service Provider Interface (SPI) 是一种为了被第三方实现或扩展的 A
 与分布式主键 KeyGenerateAlgorithm 接口相同，其他 ShardingSphere 的扩展功能也需要用相同的方式注入才能生效。
 ```
 
-[4.1.1版本参考](https://github.com/WENZIZZHENG/spring-boot-demo/blob/master/spring-boot-sharding-jdbc/spring-boot-sharding-jdbc-4.1.1/sharding-jdbc-4.1.1-db-table/src/main/java/com/example/config/sharding/key/ShardingTableKeyGenerator.java)
+[4.1.1版本参考](spring-boot-sharding-jdbc-4.1.1/sharding-jdbc-4.1.1-db-table/src/main/java/com/example/config/sharding/key/ShardingTableKeyGenerator.java)
 
-[5.0.0版本参考](https://github.com/WENZIZZHENG/spring-boot-demo/blob/master/spring-boot-sharding-jdbc/spring-boot-sharding-jdbc-5.0.0/sharding-jdbc-5.0.0-db-table/src/main/java/com/example/config/sharding/key/ShardingTableKeyGenerator.java)
+[5.0.0版本参考](spring-boot-sharding-jdbc-5.0.0/sharding-jdbc-5.0.0-db-table/src/main/java/com/example/config/sharding/key/ShardingTableKeyGenerator.java)
 
 
 
 ### **3.2 mybatis-plus更新时，触发分片字段怎么办**
 
 方案一: mybatis-plus更新前，把分片字段设为null。默认null时会跳过set。
-方案二: 使用自定义[mybatis拦截器](https://github.com/WENZIZZHENG/spring-boot-demo/blob/master/spring-boot-sharding-jdbc/spring-boot-sharding-jdbc-5.0.0/sharding-jdbc-5.0.0-db-table/src/main/java/com/example/config/MybatisPluginCustomInterceptor.java)，在拦截器中把分片字段set为空即可。（注意，mybatis-plus自动填功在这里是不能解决这个问题的）
+方案二: 使用自定义[mybatis拦截器](spring-boot-sharding-jdbc-5.0.0/sharding-jdbc-5.0.0-db-table/src/main/java/com/example/config/MybatisPluginCustomInterceptor.java)，在拦截器中把分片字段set为空即可。（注意，mybatis-plus自动填功在这里是不能解决这个问题的）
 
 
 
@@ -97,7 +97,7 @@ public class JooqDao {
 
 SQL示例：delete t0 from order_item t0 where t0.order_id = ?
 
-[sharding-jdbc 中的issues](https://github.com/apache/shardingsphere/issues/13273)
+[sharding-jdbc 中的issues]：https://github.com/apache/shardingsphere/issues/13273
 
 解决方案，直接使用**5.0.0**以上版本
 
@@ -165,7 +165,7 @@ guava版本冲突
 
 ## **4 其它参考**
 
-1. [4.0.0-RC1版本Demo参考](https://github.com/yinjihuan/sharding-jdbc)
+1. [4.0.0-RC1版本Demo参考]：https://github.com/yinjihuan/sharding-jdbc
 
 ## 5 待补充
 

@@ -34,5 +34,5 @@
 
 项目更多Demo
 
-[swagger-bootstrap-ui-demo](https://gitee.com/xiaoym/swagger-bootstrap-ui-demo)
+[swagger-bootstrap-ui-demo]：https://gitee.com/xiaoym/swagger-bootstrap-ui-demo
 

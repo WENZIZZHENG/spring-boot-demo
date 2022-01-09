@@ -12,8 +12,8 @@
 
 Mybatis-Plus官网相关文档已经很完善，有问题强烈建议阅读官方文档
 
-1. [Mybatis-Plus官网文档](https://mp.baomidou.com/)
-2. [代码生成器](https://mp.baomidou.com/guide/generator-new.html)
-3. [多数据源dynamic-datasource项目](https://github.com/baomidou/dynamic-datasource-spring-boot-starter)
-4. [多数据源dynamic-datasource详细文档](https://www.kancloud.cn/tracy5546/dynamic-datasource/2264611)
+1. [Mybatis-Plus官网文档]：https://mp.baomidou.com/
+2. [代码生成器]：https://mp.baomidou.com/guide/generator-new.html
+3. [多数据源dynamic-datasource项目]：https://github.com/baomidou/dynamic-datasource-spring-boot-starter
+4. [多数据源dynamic-datasource详细文档]：https://www.kancloud.cn/tracy5546/dynamic-datasource/2264611
 

@@ -47,25 +47,25 @@ spring-boot-demo
 
 **示例代码与概述**
 
-- [spring-boot-elasticsearch](https://github.com/WENZIZZHENG/spring-boot-demo/tree/master/spring-boot-elasticsearch)
+- [spring-boot-elasticsearch](spring-boot-elasticsearch/README.md)
 
 1.  elasticsearch 6.x，7.x版本示例
 2.  原生elasticsearch操作
 3.  Spring Data ElasticSearch操作示例,ORM操作，聚合操作
 
-- [spring-boot-mybatis-plus示例](https://github.com/WENZIZZHENG/spring-boot-demo/tree/master/spring-boot-mybatis-plus)
+- [spring-boot-mybatis-plus示例](spring-boot-mybatis-plus/README.md)
 
 1.  mybatis-plus 快速入门
 2.  mybatis-plus 代码生成器，自定义模板
 3.  mybatis-plus 多租户，自动分页，乐观锁，防止全表更新与删除，动态表名，sql性能规范，自定义ID生成器，数据填充，枚举等
 4.  mybatis-plus 多数据源
 
-- [spring-boot-sharding-jdbc示例](https://github.com/WENZIZZHENG/spring-boot-demo/tree/master/spring-boot-sharding-jdbc)
+- [spring-boot-sharding-jdbc示例](spring-boot-sharding-jdbc/README.md)
 
 1.  分库分表快速入门（4.1.1版本以及5.0.0版本）
 2.  自定义分库分表规则，自定义自增主键
 3.  与mybatis-plus整合，解决更新时触发分片规则报错问题
 4.  spring-boot-starter-jooq整合sharding-jdbc常见问题及解决方案
 
-* [spring-boot-swagger示例](https://github.com/WENZIZZHENG/spring-boot-demo/tree/master/spring-boot-swagger)
+* [spring-boot-swagger示例](spring-boot-swagger/README.md)
 
