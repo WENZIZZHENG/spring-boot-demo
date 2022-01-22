@@ -13,8 +13,8 @@
     <artifactId>spring-boot-elasticsearch-6</artifactId>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <swagger.version>2.9.2</swagger.version>
         <hutool.version>5.5.8</hutool.version>
     </properties>

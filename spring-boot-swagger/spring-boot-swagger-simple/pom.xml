@@ -13,9 +13,9 @@
     <artifactId>spring-boot-swagger-simple</artifactId>
 
     <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <spring-boot-version>2.3.2.RELEASE</spring-boot-version>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
         <swagger.version>2.9.2</swagger.version>
         <swagger.bootstrap.ui.version>1.9.3</swagger.bootstrap.ui.version>
         <knife4j.version>2.0.7</knife4j.version>

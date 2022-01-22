@@ -14,6 +14,8 @@
 
 
     <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <spring-boot-version>2.3.2.RELEASE</spring-boot-version>
         <mybatis.plus.version>3.4.2</mybatis.plus.version>
         <mysql.connector.version>8.0.16</mysql.connector.version>
