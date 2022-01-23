@@ -1,0 +1,17 @@
+server:
+  port: 7777
+
+
+spring:
+  # spring cache整合
+  cache:
+    type: caffeine
+    # 如果底层缓存管理器支持的话，要创建的以逗号分隔的缓存名称列表。通常，这将禁用动态创建额外缓存的能力。(不建议)
+    #cache-names: user,info
+    # 默认配置（如果要每个cache配置不同的参数，比如过期时长、最大容量。可以结合配置类 CaffeineConfig 一起操作）
+    caffeine:
+      # 配置详情；https://github.com/ben-manes/caffeine/wiki/Specification-zh-CN
+      # maximumSize：缓存的最大条数，expireAfterWrite：最后一次写入后经过固定时间过期（integer类型之后跟上一个"d"，"h"，"m"，或者"s"来分别表示天，小时，分钟或者秒）
+      spec: maximumSize=500,expireAfterWrite=30m
+
+
