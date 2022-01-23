@@ -41,6 +41,7 @@
         <module>spring-boot-validator</module>
         <module>spring-boot-cache-redis</module>
         <module>spring-boot-cache-caffeine</module>
+        <module>spring-boot-cache</module>
     </modules>
 
     <properties>
