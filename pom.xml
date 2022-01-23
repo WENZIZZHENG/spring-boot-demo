@@ -42,6 +42,7 @@
         <module>spring-boot-cache-redis</module>
         <module>spring-boot-cache-caffeine</module>
         <module>spring-boot-cache</module>
+        <module>spring-boot-multi-threading</module>
     </modules>
 
     <properties>
