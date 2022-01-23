@@ -35,6 +35,11 @@ public class RedisServiceImpl implements IRedisService {
     }
 
     @Override
+    public void set(String key, String value, Long seconds) {
+        stringRedisTemplate.opsForValue().set(key, value, seconds, TimeUnit.SECONDS);
+    }
+
+    @Override
     public boolean setnx(String key, String value) {
         return Boolean.TRUE.equals(stringRedisTemplate.opsForValue().setIfAbsent(key, value));
     }

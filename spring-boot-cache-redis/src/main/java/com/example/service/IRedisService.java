@@ -24,6 +24,15 @@ public interface IRedisService {
     void set(String key, String value);
 
     /**
+     * 存储数据
+     *
+     * @param key     key
+     * @param value   value
+     * @param seconds 有效时间。单位秒
+     */
+    void set(String key, String value, Long seconds);
+
+    /**
      * 存储数据（如果key不在，设置key保存字符串值。才返回true）
      *
      * @param key   key
