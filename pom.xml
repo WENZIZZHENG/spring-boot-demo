@@ -44,6 +44,7 @@
         <module>spring-boot-cache</module>
         <module>spring-boot-multi-threading</module>
         <module>spring-boot-canal</module>
+        <module>spring-boot-session-data-redis</module>
     </modules>
 
     <properties>

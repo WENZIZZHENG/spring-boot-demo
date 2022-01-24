@@ -1,0 +1,36 @@
+server:
+  port: 7777
+
+
+spring:
+  # session配置
+  session:
+    # session存储方式
+    store-type: redis
+    # 过期时间，单位s
+    timeout: 1800
+    redis:
+      # 立即写入会话存储
+      flush-mode: immediate
+  # redis配置
+  redis:
+    # redis地址
+    host: 127.0.0.1
+    # 端口
+    port: 6379
+    # 数据库索引
+    database: 0
+    # 连接超时时间（毫秒）
+    timeout: 30000ms
+    # jedis连接池
+    jedis:
+      pool:
+        # 连接池最大连接数（使用负值表示没有限制）
+        max-active: 100
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1
+        # 连接池中的最小空闲连接
+        min-idle: 1
+        # 连接池中的最大空闲连接
+        max-idle: 100
+
