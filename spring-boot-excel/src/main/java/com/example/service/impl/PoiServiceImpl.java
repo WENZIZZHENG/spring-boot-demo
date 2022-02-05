@@ -4,17 +4,26 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
 import com.example.dto.DemoData;
 import com.example.service.IPoiService;
+import com.example.util.CommonUtil;
 import com.example.util.DataUtil;
 import com.example.util.DownloadUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -42,8 +51,8 @@ public class PoiServiceImpl implements IPoiService {
         Workbook workbook = new HSSFWorkbook();
         //2  创建工作单
         Sheet sheet = workbook.createSheet();
-        //3  创建字典（模版）  设置样式  数据
 
+        //3  创建字典（模版）  设置样式  数据
         //3.1 设置头标题
         Row titleRow = sheet.createRow(0);
         //3.1.1设置样式  字体样式  行高，列宽（所有列sheet）
@@ -191,13 +200,131 @@ public class PoiServiceImpl implements IPoiService {
 
     @Override
     public void printExcel3() {
+        //利用ApachePOI创建Excel表 核心 工作簿-->工作单-->字典
+        //1  创建工作簿(和printExcel1一样，只是实现类从HSSFWorkbook改为SXSSFWorkbook)
+        Workbook workbook = new SXSSFWorkbook();
+        //2  创建工作单
+        Sheet sheet = workbook.createSheet();
 
+        //3  创建字典（模版）  设置样式  数据
+        //3.1 设置头标题
+        Row titleRow = sheet.createRow(0);
+        //3.1.1设置样式  字体样式  行高，列宽（所有列sheet）
+        Cell titleRowCell = titleRow.createCell(0);
+        //字体样式
+        titleRowCell.setCellStyle(bigTitle(workbook));
+        //行高
+        titleRow.setHeightInPoints(36f); //磅
+
+        //列宽
+        /**
+         * 参数一：列的索引
+         * 参数二：列宽度值(字符数*256=磅)
+         */
+        sheet.setColumnWidth(0, 16 * 256);
+        sheet.setColumnWidth(1, 26 * 256);
+        sheet.setColumnWidth(2, 26 * 256);
+        sheet.setColumnWidth(3, 16 * 256);
+
+        //3.1.2设置头部数据
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 3));  //合并头单元格
+        titleRowCell.setCellValue("poi测试数据");  //动态标题
+
+        //3.2  设置表格头部数据 headerRow  1行 1-8列
+        Row headerRow = sheet.createRow(1);
+        String[] headerNames = {"字符串标题", "日期标题", "格式化日期标题", "数字标题"};
+        for (int i = 0; i < headerNames.length; i++) {
+            Cell headerRowCell = headerRow.createCell(i);
+            headerRowCell.setCellStyle(bigTitle(workbook)); //设置样式
+            headerRowCell.setCellValue(headerNames[i]);//填充数据
+        }
+
+        //3.3 创建字典（数据库输入导入格式）
+        // 判断非空有数据
+        List<DemoData> data = DataUtil.data(1000000);
+        if (CollUtil.isNotEmpty(data)) {
+            //循环行 从第二行开始
+            for (int i = 0; i < data.size(); i++) {
+                //获取集合中的数据
+                DemoData vo = data.get(i);
+                Row row = sheet.createRow(i + 2);
+                //循环列  第二列到第九列
+                for (int j = 0; j < 4; j++) {
+                    Cell cell = row.createCell(j);
+                    //样式不能太多(最多64000)
+//                    cell.setCellStyle(text(workbook));
+                    //字典
+                    switch (j) {
+                        case 0:
+                            //字符串标题
+                            cell.setCellValue(vo.getString());
+                            break;
+                        case 1:
+                            //日期标题
+                            cell.setCellValue(simpleDateFormat.format(vo.getDate()));
+                            break;
+                        case 2:
+                            //格式化日期标题
+                            cell.setCellValue(simpleDateFormat.format(vo.getDateFrom()));
+                            break;
+                        case 3:
+                            //数字标题
+                            cell.setCellValue(vo.getDoubleData());
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+        //输出下载
+        DownloadUtil.download(workbook, "poi百万导出.xlsx");
     }
 
     @Override
     public void printCsv() {
+       /*
+        需要导包,这里easyexcel也有
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.8</version>
+        </dependency>
+        */
+        String fileName = "测试csv.csv";
+        HttpServletResponse response = CommonUtil.getResponse();
+        try {
+            //响应设置
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setCharacterEncoding("utf-8");
+            // 这里URLEncoder.encode可以防止中文乱码
+            fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8).replaceAll("\\+", "%20");
+            response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName);
 
+            //csv设置
+            Appendable out = new PrintWriter(response.getOutputStream());
+            //头信息
+            CSVPrinter printer = CSVFormat.DEFAULT.withHeader("字符串标题", "日期标题", "数字标题").print(out);
+            //内容
+            List<DemoData> dataList = DataUtil.data(1500000);
+            for (DemoData data : dataList) {
+                printer.printRecord(data.getString(), simpleDateFormat.format(data.getDate()), data.getDoubleData());
+            }
+            printer.flush();
+            printer.close();
+        } catch (Exception e) {
+            response.reset();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("utf-8");
+            try {
+//                response.getWriter().println(JSONUtil.toJsonStr(AjaxResult.failed()));
+                response.getWriter().println("文件csv导出失败,原因：" + e.getMessage());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
+
 
     @Override
     public void importExcel(MultipartFile file) {

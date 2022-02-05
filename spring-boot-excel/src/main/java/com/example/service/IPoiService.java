@@ -26,7 +26,7 @@ public interface IPoiService {
 
     /**
      * 3.1百万数据打印输出,不能模板导出
-     * 样式不能太多 用SXSSFWorkbook这个实体类  必须是.xlsx
+     * 样式不能太多（最多64000） 用SXSSFWorkbook这个实体类  必须是.xlsx
      */
     void printExcel3();
 

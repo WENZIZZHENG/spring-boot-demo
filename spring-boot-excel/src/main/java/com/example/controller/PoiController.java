@@ -37,9 +37,7 @@ public class PoiController {
 
     /**
      * 百万数据导出  xlsx最多只能 1048576
-     * 请求路径/excel/poi/printExcel3,请求方法GET 一共耗时15989 : ms
-     * 请求路径/easy/excel/printExcel1,请求方法GET 一共耗时181262 : ms
-     * 超大数据量推荐使用原生这个，效率高一点
+     * 样式最多64000
      */
     @GetMapping("/printExcel3")
     @ApiOperation("3.1百万数据打印输出")
