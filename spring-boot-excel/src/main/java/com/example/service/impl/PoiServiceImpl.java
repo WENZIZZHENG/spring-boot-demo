@@ -2,6 +2,8 @@ package com.example.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.example.dto.DemoData;
 import com.example.service.IPoiService;
 import com.example.util.CommonUtil;
@@ -24,7 +26,9 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -134,7 +138,7 @@ public class PoiServiceImpl implements IPoiService {
         //1.1 读取样式
         InputStream inputStream = new ClassPathResource("excel/tOUTPRODUCT.xlsx").getStream();
         //1.2  创建工作簿
-        Workbook workbook = null;
+        Workbook workbook;
         try {
             //xls格式--HSSFWorkbook
 //            workbook = new HSSFWorkbook(inputStream);
@@ -328,7 +332,82 @@ public class PoiServiceImpl implements IPoiService {
 
     @Override
     public void importExcel(MultipartFile file) {
+        //文件名
+        String filename = file.getOriginalFilename();
+        if (StrUtil.isBlank(filename)) {
+            throw new RuntimeException("文件名不能为空！");
+        }
 
+        Workbook workbook;
+
+        //判断上传文件格式  03版本以前还是07版本以后
+        try {
+            if (filename.endsWith(".xls")) {
+                //03以前
+                workbook = new HSSFWorkbook(file.getInputStream());
+            } else if (filename.endsWith(".xlsx")) {
+                //07以后
+                workbook = new XSSFWorkbook(file.getInputStream());
+            } else {
+                //错误格式
+                throw new RuntimeException("格式错误，请参考模版");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("读取文件错误！");
+        }
+
+        //获取数据，并保存
+        Sheet sheet = workbook.getSheetAt(0);
+        int totalRows = sheet.getPhysicalNumberOfRows();
+        //数据存储
+        List<DemoData> dataList = new ArrayList<>(totalRows);
+
+        //双循环保存信息  循环行数
+        for (int i = 2; i < totalRows; i++) {
+            Row row = sheet.getRow(i);
+            //保存信息
+            DemoData demoData = new DemoData();
+            dataList.add(demoData);
+
+            //循环列数，获取信息 看标准的格式
+            for (int j = 0; j < 4; j++) {
+                //判断值是否为空
+                Cell cell = row.getCell(j);
+                if (ObjectUtil.isNull(cell)) {
+                    continue;
+                }
+                //查字典，赋值数据
+                switch (j) {
+                    case 0:
+                        //字符串标题
+                        demoData.setString(cell.getStringCellValue());
+                        break;
+                    case 1:
+                        //日期标题
+                        try {
+                            demoData.setDate(simpleDateFormat.parse(cell.getStringCellValue()));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 2:
+                        //格式化日期标题
+                        try {
+                            demoData.setDateFrom(simpleDateFormat.parse(cell.getStringCellValue()));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 3:
+                        //数字标题
+                        demoData.setDoubleData(cell.getNumericCellValue());
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        dataList.forEach(System.out::println);
     }
 
     @Override
@@ -355,26 +434,6 @@ public class PoiServiceImpl implements IPoiService {
         return style;
     }
 
-    /**
-     * 小标题的样式
-     *
-     * @param wb 工作簿
-     * @return 样式
-     */
-    private CellStyle title(Workbook wb) {
-        CellStyle style = wb.createCellStyle();
-        Font font = wb.createFont();
-        font.setFontName("黑体");
-        font.setFontHeightInPoints((short) 12);
-        style.setFont(font);
-        style.setAlignment(HorizontalAlignment.CENTER);                //横向居中
-        style.setVerticalAlignment(VerticalAlignment.CENTER);        //纵向居中
-        style.setBorderTop(BorderStyle.THIN);                        //上细线
-        style.setBorderBottom(BorderStyle.THIN);                    //下细线
-        style.setBorderLeft(BorderStyle.THIN);                        //左细线
-        style.setBorderRight(BorderStyle.THIN);                        //右细线
-        return style;
-    }
 
     /**
      * 文字样式
