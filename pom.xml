@@ -45,6 +45,7 @@
         <module>spring-boot-multi-threading</module>
         <module>spring-boot-canal</module>
         <module>spring-boot-session-data-redis</module>
+        <module>spring-boot-excel</module>
     </modules>
 
     <properties>

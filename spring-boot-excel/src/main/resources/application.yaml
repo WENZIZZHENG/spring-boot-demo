@@ -1,0 +1,11 @@
+server:
+  port: 7777
+
+
+spring:
+  servlet:
+    # 文件上传限制
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
