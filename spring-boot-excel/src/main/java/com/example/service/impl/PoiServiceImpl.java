@@ -1,6 +1,7 @@
 package com.example.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.io.resource.ClassPathResource;
 import com.example.dto.DemoData;
 import com.example.service.IPoiService;
 import com.example.util.DataUtil;
@@ -9,9 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -26,6 +29,11 @@ import java.util.List;
 @Slf4j
 @Service
 public class PoiServiceImpl implements IPoiService {
+
+    /**
+     * 时间格式化
+     */
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public void printExcel1() {
@@ -70,7 +78,6 @@ public class PoiServiceImpl implements IPoiService {
 
         //3.3 创建字典（数据库输入导入格式）
         // 判断非空有数据
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<DemoData> data = DataUtil.data();
         if (CollUtil.isNotEmpty(data)) {
             //循环行 从第二行开始
@@ -112,7 +119,74 @@ public class PoiServiceImpl implements IPoiService {
 
     @Override
     public void printExcel2() {
+        //工作  获取模版样式-->赋值
 
+        //利用ApachePOI读取模块Excel表   核心 工作簿-->工作单-->字典
+        //1.1 读取样式
+        InputStream inputStream = new ClassPathResource("excel/tOUTPRODUCT.xlsx").getStream();
+        //1.2  创建工作簿
+        Workbook workbook = null;
+        try {
+            //xls格式--HSSFWorkbook
+//            workbook = new HSSFWorkbook(inputStream);
+            //xlsx格式--XSSFWorkbook
+            workbook = new XSSFWorkbook(inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("读取模板失败");
+        }
+        //2  获取工作单
+        Sheet sheet = workbook.getSheetAt(0);
+        //3  创建字典（模版）  设置样式  数据
+
+        //3.1 设置头标题数据（修改数据）
+        Row titleRow = sheet.getRow(0);
+        Cell titleRowCell = titleRow.getCell(0);
+        titleRowCell.setCellValue("poi模板测试" + System.currentTimeMillis());  //动态标题
+
+        //3.2  获取插入数据对应的样式,存放在集合中（数据已经存在）
+        Row headerRow = sheet.getRow(2);
+        CellStyle[] styles = new CellStyle[3];
+        for (int i = 0; i < 3; i++) {
+            styles[i] = headerRow.getCell(i).getCellStyle();
+        }
+
+        //3.3 创建字典（数据库输入导入格式）
+        List<DemoData> data = DataUtil.data();
+        // 判断非空有数据
+        if (CollUtil.isNotEmpty(data)) {
+            //循环行 从第二行开始
+            for (int i = 0; i < data.size(); i++) {
+                //获取集合中的数据
+                DemoData vo = data.get(i);
+                Row row = sheet.createRow(i + 2);
+                //循环列  第一列到第三列
+                for (int j = 0; j < 3; j++) {
+                    Cell cell = row.createCell(j);
+                    //复制样式
+                    cell.setCellStyle(styles[j]);
+                    //字典
+                    switch (j) {
+                        case 0:
+                            //字符串标题
+                            cell.setCellValue(vo.getString());
+                            break;
+                        case 1:
+                            //日期标题
+                            cell.setCellValue(simpleDateFormat.format(vo.getDate()));
+                            break;
+                        case 2:
+                            //数字标题
+                            cell.setCellValue(vo.getDoubleData());
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+        //输出下载
+        DownloadUtil.download(workbook, "poi模板导出测试.xlsx");
     }
 
     @Override
