@@ -22,9 +22,10 @@ public interface IEasyExcelService {
     void printExcel2();
 
     /**
-     * 4excel导入  能支持xlsx，xls，csv格式导出
+     * 3excel导入  能支持xlsx，xls，csv格式
+     * 参考：https://www.yuque.com/easyexcel/doc/read
      *
-     * @param file excel文件
+     * @param file excel文件（测试数据：printExcel1接口的导出结果即可）
      */
     void importExcel(MultipartFile file);
 }

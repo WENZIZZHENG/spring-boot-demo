@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 
 /**
  * <p>
@@ -40,10 +38,13 @@ public class EasyExcelController {
         easyExcelService.printExcel2();
     }
 
-
+    /**
+     * file测试数据：printExcel1接口的导出结果即可
+     * 参考：https://www.yuque.com/easyexcel/doc/read
+     */
     @PostMapping("/importExcel")
-    @ApiOperation("4excel导入")
-    public String importExcel(@RequestParam("file") MultipartFile file) throws IOException {
+    @ApiOperation("3excel导入")
+    public String importExcel(@RequestParam("file") MultipartFile file) {
         easyExcelService.importExcel(file);
         return "success";
     }
