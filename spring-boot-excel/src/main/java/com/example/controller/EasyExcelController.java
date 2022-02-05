@@ -26,9 +26,7 @@ public class EasyExcelController {
     private IEasyExcelService easyExcelService;
 
     /**
-     * 能支持xlsx，xls，csv格式导出
-     * <p>
-     * 超大数据量推荐使用原生这个，效率高很多（csv也是）
+     * 支持xlsx，xls，csv格式导出
      */
     @GetMapping("/printExcel1")
     @ApiOperation("1普通excel导出")

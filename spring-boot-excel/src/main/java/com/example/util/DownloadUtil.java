@@ -2,6 +2,7 @@ package com.example.util;
 
 import cn.hutool.core.io.resource.ClassPathResource;
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.support.ExcelTypeEnum;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import javax.servlet.ServletOutputStream;
@@ -62,8 +63,6 @@ public class DownloadUtil {
             //设置响应类型	PDF文件为"application/pdf"，WORD文件为："application/msword"， EXCEL文件为："application/vnd.ms-excel"。
             response.setContentType("application/octet-stream;charset=utf-8");
 
-            //设置响应的文件名称,并转换成中文编码
-            //returnName = URLEncoder.encode(returnName,"UTF-8");
             //保存的文件名,必须和页面编码一致,否则乱码
             returnName = response.encodeURL(new String(returnName.getBytes(), "iso8859-1"));
 
@@ -157,11 +156,11 @@ public class DownloadUtil {
     /**
      * todo 推荐
      * 文件下载并且失败的时候返回json（默认失败了会返回一个有部分数据的Excel）
-     * 直接写，这里注意，finish的时候会自动关闭OutputStream,当然你外面再关闭流问题不大
+     * 这里注意，finish的时候会自动关闭OutputStream,当然你外面再关闭流问题不大
      *
      * @param head      创建excel对应的实体对象 参照{@link } todo
      * @param data      设置返回的 参数
-     * @param fileName  文件名   机器人 机器人.xlsx  缺失文件类型时,会根据数据量自动适配xlsx或csv格式
+     * @param fileName  文件名   机器人 机器人.xlsx  缺失文件类型时,会根据数据量自动适配xls,xlsx或csv格式
      * @param sheetName sheetName
      */
     public static void downloadExcel(Class<?> head, Collection<?> data, String fileName, String sheetName) {
@@ -177,7 +176,10 @@ public class DownloadUtil {
             fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8).replaceAll("\\+", "%20");
             response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName);
             // 这里需要设置不关闭流
-            EasyExcel.write(response.getOutputStream(), head).autoCloseStream(Boolean.FALSE).sheet(sheetName)
+            EasyExcel.write(response.getOutputStream(), head)
+                    //这里不指定类型，会默认xlsx。xls和csv都会失效
+                    .excelType(getExcelType(fileName))
+                    .autoCloseStream(Boolean.FALSE).sheet(sheetName)
                     .doWrite(data);
         } catch (Exception e) {
             // 重置response
@@ -185,7 +187,7 @@ public class DownloadUtil {
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             try {
-                //todo 自定义统一异常返回
+                //可以自定义统一异常返回
 //                response.getWriter().println(JSONUtil.toJsonStr(AjaxResult.failed()));
                 response.getWriter().println("文件下载失败,原因：" + e.getMessage());
             } catch (Exception ex) {
@@ -198,11 +200,11 @@ public class DownloadUtil {
 
     /**
      * 文件下载（失败了会返回一个有部分数据的Excel）
-     * 直接写，这里注意，finish的时候会自动关闭OutputStream,当然你外面再关闭流问题不大
+     * 这里注意，finish的时候会自动关闭OutputStream,当然你外面再关闭流问题不大
      *
      * @param head      创建excel对应的实体对象 参照{@link } todo
      * @param data      设置返回的 参数
-     * @param fileName  文件名   机器人 机器人.xlsx  缺失文件类型时,会根据数据量自动适配xlsx或csv格式
+     * @param fileName  文件名   机器人 机器人.xlsx  缺失文件类型时,会根据数据量自动适配xls,xlsx或csv格式
      * @param sheetName sheetName
      */
     public static void downloadExcel2(Class<?> head, Collection<?> data, String fileName, String sheetName) {
@@ -227,16 +229,19 @@ public class DownloadUtil {
     /**
      * 按照模板导出
      * 文件下载并且失败的时候返回json（默认失败了会返回一个有部分数据的Excel）
-     * 直接写，这里注意，finish的时候会自动关闭OutputStream,当然你外面再关闭流问题不大
+     * 这里注意，finish的时候会自动关闭OutputStream,当然你外面再关闭流问题不大
      *
      * @param data     设置返回的 参数
-     * @param fileName 文件名   机器人 机器人.xlsx  缺失文件类型时,会根据数据量自动适配xlsx或csv格式
+     * @param fileName 文件名   机器人 机器人.xlsx  缺失文件类型时,会根据模板自动适配xls,xlsx或csv格式
      * @param template 模板路径，相对于resources
      */
     public static void downloadExcelByTemplate(Collection<?> data, String fileName, String template) {
         HttpServletResponse response = CommonUtil.getResponse();
         //自动补齐文件类型
-        fileName = fillFileType(fileName, data);
+        if (!fileName.contains(".") && template.contains(".")) {
+            String type = template.substring(template.lastIndexOf("."));
+            fileName = fileName + type;
+        }
 
         // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
         try {
@@ -245,26 +250,19 @@ public class DownloadUtil {
             // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
             fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8).replaceAll("\\+", "%20");
             response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName);
-            // 这里需要设置不关闭流
-
-//            ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream())
-//                    .withTemplate(new ClassPathResource(template).getStream()).build();
-//            WriteSheet writeSheet = EasyExcel.writerSheet().build();
-//            data.forEach(x -> {
-//                excelWriter.fill(x, writeSheet);
-//            });
 
             EasyExcel.write(response.getOutputStream())
                     .withTemplate(new ClassPathResource(template).getStream())
+                    //这里不指定类型，会默认xlsx。xls和csv都会失效
+                    .excelType(getExcelType(fileName))
                     .sheet().doFill(data);
-
         } catch (Exception e) {
             // 重置response
             response.reset();
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             try {
-                //todo 自定义统一异常返回
+                //可以自定义统一异常返回
 //                response.getWriter().println(JSONUtil.toJsonStr(AjaxResult.failed()));
                 response.getWriter().println("文件下载失败,原因：" + e.getMessage());
             } catch (Exception ex) {
@@ -276,21 +274,41 @@ public class DownloadUtil {
 
 
     /**
-     * 自动补齐文件类型,这里只选择xlsx和csv
+     * 自动补齐文件类型,xls,xlsx或csv
      *
-     * @param fileName 机器人 机器人.xlsx  缺失文件类型时,会根据数据量自动适配xlsx或csv格式
+     * @param fileName 机器人 机器人.xlsx  缺失文件类型时,会根据数据量自动适配,xls,xlsx或csv
      * @param data     数据量
      * @return 机器人.xlsx
      */
     private static String fillFileType(String fileName, Collection<?> data) {
-        //自动补齐文件类型,xlsx最多只能 1048576
         if (!fileName.contains(".")) {
-            if (data.size() <= 1048500) {
+            if (data.size() <= 65500) {
+                //excel 2003 xls 最多只允许存储65536条数据，
+                fileName = fileName + ".xls";
+            } else if (data.size() <= 1048500) {
+                //自动补齐文件类型,xlsx最多只能 1048576
                 fileName = fileName + ".xlsx";
             } else {
                 fileName = fileName + ".csv";
             }
         }
         return fileName;
+    }
+
+
+    /**
+     * 获取导出格式
+     *
+     * @param fileName 文件名，机器人.xlsx
+     * @return 导出格式（缺失默认xlsx）
+     */
+    private static ExcelTypeEnum getExcelType(String fileName) {
+        if (fileName.endsWith(ExcelTypeEnum.XLS.getValue())) {
+            return ExcelTypeEnum.XLS;
+        } else if (fileName.endsWith(ExcelTypeEnum.CSV.getValue())) {
+            return ExcelTypeEnum.CSV;
+        } else {
+            return ExcelTypeEnum.XLSX;
+        }
     }
 }
