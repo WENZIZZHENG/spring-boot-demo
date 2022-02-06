@@ -63,12 +63,18 @@ public class PoiController {
      * @param file 测试数据：printExcel1或printExcel3接口的导出结果即可
      */
     @PostMapping("/importExcel")
-    @ApiOperation("4excel导入")
+    @ApiOperation("4excel导入（少量数据）")
     public String importExcel(@RequestParam("file") MultipartFile file) {
         poiService.importExcel(file);
         return "success";
     }
 
+    /**
+     * 百万数据-大数据导入（只支持xlsx格式）
+     * 解析是一条条解析，并不是全部加载到内存中。所以不会有OOM问题
+     *
+     * @param file 测试数据：printExcel1或printExcel3接口的导出结果即可
+     */
     @PostMapping("/importExcel2")
     @ApiOperation("5excel导入-百万数据")
     public String importExcel2(@RequestParam("file") MultipartFile file) {

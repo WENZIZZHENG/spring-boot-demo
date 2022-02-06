@@ -9,6 +9,8 @@ import com.example.service.IPoiService;
 import com.example.util.CommonUtil;
 import com.example.util.DataUtil;
 import com.example.util.DownloadUtil;
+import com.example.util.excel.ExcelParserUtil;
+import com.example.util.excel.handler.DemoDataHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -412,7 +414,8 @@ public class PoiServiceImpl implements IPoiService {
 
     @Override
     public void importExcel2(MultipartFile file) {
-
+        //可以新建，也可以注入
+        ExcelParserUtil.parse(file, new DemoDataHandler());
     }
 
 

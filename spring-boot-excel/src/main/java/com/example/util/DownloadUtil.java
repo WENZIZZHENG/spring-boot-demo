@@ -4,6 +4,7 @@ import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.support.ExcelTypeEnum;
+import com.example.dto.DemoData;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import javax.servlet.ServletOutputStream;
@@ -159,7 +160,7 @@ public class DownloadUtil {
      * 文件下载并且失败的时候返回json（默认失败了会返回一个有部分数据的Excel）
      * 这里注意，finish的时候会自动关闭OutputStream,当然你外面再关闭流问题不大
      *
-     * @param head      创建excel对应的实体对象 参照{@link } todo
+     * @param head      创建excel对应的实体对象 参照{@link DemoData}
      * @param data      设置返回的 参数
      * @param fileName  文件名   机器人 机器人.xlsx  缺失文件类型时,会根据数据量自动适配xls,xlsx或csv格式
      * @param sheetName sheetName
@@ -203,7 +204,7 @@ public class DownloadUtil {
      * 文件下载（失败了会返回一个有部分数据的Excel）
      * 这里注意，finish的时候会自动关闭OutputStream,当然你外面再关闭流问题不大
      *
-     * @param head      创建excel对应的实体对象 参照{@link } todo
+     * @param head      创建excel对应的实体对象 参照{@link DemoData}
      * @param data      设置返回的 参数
      * @param fileName  文件名   机器人 机器人.xlsx  缺失文件类型时,会根据数据量自动适配xls,xlsx或csv格式
      * @param sheetName sheetName

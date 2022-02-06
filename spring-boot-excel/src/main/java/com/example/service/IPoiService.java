@@ -37,7 +37,7 @@ public interface IPoiService {
 
 
     /**
-     * excel导出
+     * excel导出（少量数据）
      * 数据量少的时候可以用。简单方便（10万以下呗）
      * 一次全部加载到内存中，数据量大时会直接OOM，反正加载不完（测试：100万数据直接导入）
      *
@@ -46,9 +46,10 @@ public interface IPoiService {
     void importExcel(MultipartFile file);
 
     /**
-     * excel导入-百万数据
+     * 百万数据-大数据导入（只支持xlsx格式）
+     * 解析是一条条解析，并不是全部加载到内存中。所以不会有OOM问题
      *
-     * @param file excel
+     * @param file 测试数据：printExcel1或printExcel3接口的导出结果即可
      */
     void importExcel2(MultipartFile file);
 
