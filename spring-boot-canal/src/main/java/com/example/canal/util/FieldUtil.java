@@ -1,6 +1,7 @@
 package com.example.canal.util;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.example.canal.annotation.CanalTable;
@@ -79,34 +80,15 @@ public class FieldUtil {
      */
     public static void setFieldValue(Object object, String fieldName, String value) throws IllegalAccessException {
         //fieldName 下划线转驼峰
+        fieldName = fieldName.toLowerCase();
         fieldName = StrUtil.toCamelCase(fieldName);
-        Field field;
-        try {
-            //获取自身
-            field = object.getClass().getDeclaredField(fieldName);
-        } catch (NoSuchFieldException e) {
-            try {
-                //获取父类
-                field = object.getClass().getSuperclass().getDeclaredField(fieldName);
-            } catch (Exception ex) {
-                return;
-            }
-        }
-        field.setAccessible(true);
-        Class<?> type = field.getType();
-        Object result = convertType(type, value);
-        field.set(object, result);
-    }
 
+        Field field = ReflectUtil.getField(object.getClass(), fieldName);
 
-    /**
-     * 类型转换
-     *
-     * @param type        类型，Integer，Long
-     * @param columnValue str类型的value
-     * @return 对象类型
-     */
-    static Object convertType(Class<?> type, String columnValue) {
-        return Convert.convert(type, columnValue);
+        //类型转换
+        Object result = Convert.convert(field.getType(), value);
+
+        //赋值
+        ReflectUtil.setFieldValue(object, field, result);
     }
 }
