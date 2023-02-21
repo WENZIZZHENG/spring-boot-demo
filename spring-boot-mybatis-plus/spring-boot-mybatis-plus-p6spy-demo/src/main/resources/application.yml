@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+
+# 数据源配置
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    # 原来
+#    driverClassName: com.mysql.cj.jdbc.Driver
+    # 使用p6spy后需要修改成的样子,还需要配置spy.properties
+    driverClassName: com.p6spy.engine.spy.P6SpyDriver
+    druid:
+      # 原来
+#      url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+      # 使用p6spy后需要修改成的样子,还需要配置spy.properties（注：有可能启动失败，就把useSSL=false）
+      url: jdbc:p6spy:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+      username: root
+      password: root
+#其它配置省略，详情请查看 spring-boot-mybatis-plus-demo

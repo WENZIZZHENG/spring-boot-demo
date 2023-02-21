@@ -46,6 +46,7 @@
         <module>spring-boot-canal</module>
         <module>spring-boot-session-data-redis</module>
         <module>spring-boot-excel</module>
+        <module>spring-boot-mybatis-plus/spring-boot-mybatis-plus-p6spy-demo</module>
     </modules>
 
     <properties>

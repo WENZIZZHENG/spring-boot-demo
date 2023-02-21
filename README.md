@@ -39,6 +39,7 @@ spring-boot-demo
   │   ├── spring-boot-mybatis-plus-demo                     #mybatis-plus 企业级应用
   │   ├── spring-boot-mybatis-plus-dynamic-datasourc-demo   #mybatis-plus 多数据源
   │   ├── spring-boot-mybatis-plus-generate                 #mybatis-plus 代码生成器，自定义模板
+  │   ├── spring-boot-mybatis-plus-p6spy-demo               #mybatis-plus 整合p6spy sql分析
   │   └── spring-boot-mybatis-plus-simple                   #mybatis-plus 快速入门
   ├── spring-boot-sharding-jdbc                    #常见问题，注意事项,参考资料
   │   ├── spring-boot-sharding-jdbc-5.0.0
