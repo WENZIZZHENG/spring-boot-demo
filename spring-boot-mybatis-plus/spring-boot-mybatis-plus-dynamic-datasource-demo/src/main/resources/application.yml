@@ -63,14 +63,14 @@ spring:
         #默认数据库，没有@DS的
         master:
           driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://localhost:3306/master?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+          url: jdbc:mysql://localhost:3306/master?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
           username: root
           password: root
         #从数据库，  slave_1，slave_2，slave_3都是对应 @DS("slave") ,可以设置负载均衡策略
         slave_1:
           driver-class-name: com.mysql.cj.jdbc.Driver
           #url其实也可以加密，这里就不演示
-          url: jdbc:mysql://localhost:3306/slave_1?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+          url: jdbc:mysql://localhost:3306/slave_1?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
           #加密，这里做演示，参考 com.example.service.DynamicTest。不加密参考上面的master
           #参考 https://www.kancloud.cn/tracy5546/dynamic-datasource/2280963
           username: ENC(Qc7LHbREH+K7Yk/2QAy5RU1X2BXjtj1GUV0mEU7k9YQCEfkWMBolmIBpY4p29WQVL13iDMWB+Zsdo8JS0oFA5A==)
@@ -88,12 +88,12 @@ spring:
             initial-size: 6
         slave_2:
           driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://localhost:3306/slave_2?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+          url: jdbc:mysql://localhost:3306/slave_2?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
           username: root
           password: root
         slave_3:
           driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://localhost:3306/slave_3?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+          url: jdbc:mysql://localhost:3306/slave_3?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
           username: root
           password: root
 

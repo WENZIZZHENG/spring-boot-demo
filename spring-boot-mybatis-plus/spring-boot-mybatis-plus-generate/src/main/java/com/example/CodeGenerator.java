@@ -37,7 +37,7 @@ public class CodeGenerator {
 
         FastAutoGenerator fastAutoGenerator = FastAutoGenerator
                 //配置数据源
-                .create("jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8",
+                .create("jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8",
                         "root", "root")
 
                 //全局配置
