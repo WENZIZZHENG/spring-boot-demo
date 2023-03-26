@@ -13,12 +13,12 @@ import java.util.List;
 
 /**
  * <p>
- * 自定义代码生成器-使用自定义模板
+ * 自定义简单代码生成器-使用自定义模板
  * </p>
  *
  * @author MrWen
  **/
-public class CustomCodeGenerator {
+public class CustomSimpleCodeGenerator {
 
     /**
      * 包父路径
@@ -75,7 +75,7 @@ public class CustomCodeGenerator {
                     builder.author(AUTHOR) // 设置作者
                             .enableSwagger() // 开启 swagger 模式
                             .disableOpenDir()//禁止打开输出目录
-                            .dateType(DateType.ONLY_DATE)//时间格式，只使用 java.util.date 代替  默认LocalDate
+                            .dateType(DateType.TIME_PACK)//时间格式，只使用 java.util.date 代替  默认LocalDate
                             .fileOverride() // 覆盖已生成文件
                             .outputDir(PROJECT_PATH + "/src/main/java"); // 指定输出目录
                 })
@@ -137,12 +137,12 @@ public class CustomCodeGenerator {
                 .templateEngine(new FreemarkerTemplateEngine())
                 .templateConfig(builder -> {
                     //自定义模板，可以走默认的
-                    builder.controller("/customTemplates/controller.java")
-                            .service("/customTemplates/service.java")
-                            .serviceImpl("/customTemplates/serviceImpl.java")
-                            .mapper("/customTemplates/mapper.java")
-                            .mapperXml("/customTemplates/mapper.xml")
-                            .entity("/customTemplates/entity.java");
+                    builder.controller("/customSimpleTemplates/controller.java")
+                            .service("/customSimpleTemplates/service.java")
+                            .serviceImpl("/customSimpleTemplates/serviceImpl.java")
+                            .mapper("/customSimpleTemplates/mapper.java")
+                            .mapperXml("/customSimpleTemplates/mapper.xml")
+                            .entity("/customSimpleTemplates/entity.java");
                 });
 
         //执行

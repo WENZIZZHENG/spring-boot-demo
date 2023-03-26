@@ -74,7 +74,7 @@ public class SimpleCodeGenerator {
                     builder.author(AUTHOR) // 设置作者
                             .enableSwagger() // 开启 swagger 模式
                             .disableOpenDir()//禁止打开输出目录
-                            .dateType(DateType.ONLY_DATE)//时间格式，只使用 java.util.date 代替  默认LocalDate
+                            .dateType(DateType.TIME_PACK)//时间格式，只使用 java.util.date 代替  默认LocalDate
                             .fileOverride() // 覆盖已生成文件
                             .outputDir(PROJECT_PATH + "/src/main/java"); // 指定输出目录
                 })
