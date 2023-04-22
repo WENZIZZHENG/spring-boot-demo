@@ -54,11 +54,11 @@ public class CustomComplexCodeGenerator {
     /**
      * mapper包路径
      */
-    private static final String MAPPER_PACKAGE_PATH = "infrastructure.persistence.entity";
+    private static final String MAPPER_PACKAGE_PATH = "infrastructure.persistence.mapper";
     /**
      * entity包路径
      */
-    private static final String ENTITY_PACKAGE_PATH = "infrastructure.persistence.mapper";
+    private static final String ENTITY_PACKAGE_PATH = "infrastructure.persistence.entity";
     /**
      * repository包路径
      */
