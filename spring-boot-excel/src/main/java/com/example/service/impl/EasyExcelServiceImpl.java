@@ -6,7 +6,7 @@ import com.alibaba.excel.read.listener.PageReadListener;
 import com.example.dto.DemoData;
 import com.example.service.IEasyExcelService;
 import com.example.util.DataUtil;
-import com.example.util.DownloadUtil;
+import com.example.util.excel.ExcelUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,15 +33,15 @@ public class EasyExcelServiceImpl implements IEasyExcelService {
 //        List<DemoData> data = DataUtil.data(100000);
         //csv: 数据量>1048500
 //        List<DemoData> data = DataUtil.data(1300000);
-        DownloadUtil.downloadExcel(DemoData.class, data, "easyExcel测试1", "测试");
+        ExcelUtil.downloadExcel(DemoData.class, data, "easyExcel测试1", "测试");
     }
 
 
     @Override
     public void printExcel2() {
         List<DemoData> data = DataUtil.data();
-        DownloadUtil.downloadExcelByTemplate(data, "easyExcel模板导出", "excel/EasyExcel模板.xls");
-//        DownloadUtil.downloadExcelByTemplate(data, "easyExcel模板导出", "excel/EasyExcel模板.xlsx");
+        ExcelUtil.downloadExcelByTemplate(data, "easyExcel模板导出", "excel/EasyExcel模板.xls");
+//        ExcelUtil.downloadExcelByTemplate(data, "easyExcel模板导出", "excel/EasyExcel模板.xlsx");
     }
 
 
@@ -60,7 +60,7 @@ public class EasyExcelServiceImpl implements IEasyExcelService {
                                 }
                             }))
                     //这里不指定类型，会默认xlsx。xls和csv都会失效
-                    .excelType(DownloadUtil.getExcelType(file.getOriginalFilename()))
+                    .excelType(ExcelUtil.getExcelType(file.getOriginalFilename()))
                     .sheet().doRead();
         } catch (Exception e) {
             log.error("读取文件失败啦！,原因:{}", e.getMessage(), e);

@@ -1,10 +1,13 @@
-package com.example.util;
+package com.example.util.excel;
 
 import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.support.ExcelTypeEnum;
+import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.example.dto.DemoData;
+import com.example.util.CommonUtil;
+import com.example.util.excel.convert.ExcelBigNumberConvert;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import javax.servlet.ServletOutputStream;
@@ -18,12 +21,12 @@ import java.util.Collection;
 
 /**
  * <p>
- * 下载工具
+ * excel工具
  * </p>
  *
  * @author MrWen
  **/
-public class DownloadUtil {
+public class ExcelUtil {
 
     /**
      * @param filePath   要下载的文件路径
@@ -178,9 +181,14 @@ public class DownloadUtil {
             response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName);
             // 这里需要设置不关闭流
             EasyExcel.write(response.getOutputStream(), head)
+                    .autoCloseStream(Boolean.FALSE)
                     //这里不指定类型，会默认xlsx。xls和csv都会失效
                     .excelType(getExcelType(fileName))
-                    .autoCloseStream(Boolean.FALSE).sheet(sheetName)
+                    // 自动适配
+                    .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
+                    // 大数值自动转换 防止失真
+                    .registerConverter(new ExcelBigNumberConvert())
+                    .sheet(sheetName)
                     .doWrite(data);
         } catch (Exception e) {
             // 重置response
@@ -220,7 +228,13 @@ public class DownloadUtil {
             // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
             fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
             response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName);
-            EasyExcel.write(response.getOutputStream(), head).sheet(sheetName).doWrite(data);
+            EasyExcel.write(response.getOutputStream(), head)
+                    .sheet(sheetName)
+                    // 自动适配
+                    .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
+                    // 大数值自动转换 防止失真
+                    .registerConverter(new ExcelBigNumberConvert())
+                    .doWrite(data);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("文件excel下载失败啦，原因:{}" + e.getMessage());
@@ -256,7 +270,8 @@ public class DownloadUtil {
                     .withTemplate(new ClassPathResource(template).getStream())
                     //这里不指定类型，会默认xlsx。xls和csv都会失效
                     .excelType(getExcelType(fileName))
-                    .sheet().doFill(data);
+                    .sheet()
+                    .doFill(data);
         } catch (Exception e) {
             // 重置response
             response.reset();

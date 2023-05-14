@@ -8,7 +8,7 @@ import com.example.dto.DemoData;
 import com.example.service.IPoiService;
 import com.example.util.CommonUtil;
 import com.example.util.DataUtil;
-import com.example.util.DownloadUtil;
+import com.example.util.excel.ExcelUtil;
 import com.example.util.excel.ExcelParserUtil;
 import com.example.util.excel.handler.DemoDataHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -128,7 +128,7 @@ public class PoiServiceImpl implements IPoiService {
             }
         }
         //输出下载
-        DownloadUtil.download(workbook, "poi普通导出.xls");
+        ExcelUtil.download(workbook, "poi普通导出.xls");
     }
 
     @Override
@@ -200,7 +200,7 @@ public class PoiServiceImpl implements IPoiService {
             }
         }
         //输出下载
-        DownloadUtil.download(workbook, "poi模板导出测试.xlsx");
+        ExcelUtil.download(workbook, "poi模板导出测试.xlsx");
     }
 
     @Override
@@ -283,7 +283,7 @@ public class PoiServiceImpl implements IPoiService {
             }
         }
         //输出下载
-        DownloadUtil.download(workbook, "poi百万导出.xlsx");
+        ExcelUtil.download(workbook, "poi百万导出.xlsx");
     }
 
     @Override
