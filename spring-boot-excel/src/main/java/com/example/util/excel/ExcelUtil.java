@@ -270,6 +270,8 @@ public class ExcelUtil {
                     .withTemplate(new ClassPathResource(template).getStream())
                     //这里不指定类型，会默认xlsx。xls和csv都会失效
                     .excelType(getExcelType(fileName))
+                    // 大数值自动转换 防止失真
+                    .registerConverter(new ExcelBigNumberConvert())
                     .sheet()
                     .doFill(data);
         } catch (Exception e) {
